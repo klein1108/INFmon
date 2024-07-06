@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1720223181 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon\main.c
+	"raylib.h"
+	<string.h>
+
