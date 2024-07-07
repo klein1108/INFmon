@@ -3,3 +3,33 @@
 	"raylib.h"
 	<string.h>
 
+1720303599 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\src\main.c
+	"raylib.h"
+	<string.h>
+
+1720302989 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\library.c
+
+1720303292 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\src\library.c
+	"../library.h"
+
+1720302937 f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\library.h
+
+1720305251 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\charactions.c
+
+1720383631 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\main.c
+	"raylib.h"
+	"charactions.h"
+	"utils.h"
+	<string.h>
+
+1720305203 f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\charactions.h
+
+1720305251 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\src\charactions\charactions.c
+
+1720383529 source:f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\utils.c
+	<stdio.h>
+	"raylib.h"
+
+1720382118 f:\ufrgs\aulas\semestre 1\alg e prog\infmon\infmon project\utils.h
+	"raylib.h"
+
