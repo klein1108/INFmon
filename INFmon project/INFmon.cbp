@@ -31,13 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="src/charactions/charactions.c">
+		<Unit filename="charactions.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/charactions/charactions.h" />
-		<Unit filename="src/main.c">
+		<Unit filename="charactions.h" />
+		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
