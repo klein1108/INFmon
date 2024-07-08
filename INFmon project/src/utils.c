@@ -1,4 +1,3 @@
-#include<stdio.h>
 #include "raylib.h"
 
 #define TRUE 1

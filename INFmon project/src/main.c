@@ -1,8 +1,8 @@
-#include "raylib.h"
-#include "charactions.h"
-#include "utils.h"
-
 #include <string.h>
+
+#include "raylib.h"
+#include "../lib/charactions.h"
+#include "../lib/utils.h"
 
 #define LARGURA 1200
 #define ALTURA 600
