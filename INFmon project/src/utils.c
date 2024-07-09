@@ -20,6 +20,15 @@ Rectangle criaRetangulo(float posX, float posY, float width, float height, float
 }
 
 Rectangle criaBotao(float posX, float posY, float width, float height, float gap, float nBotao, float larguraBorda, Color corPadrao, Color corSecundaria, int isEmCima){
+//    printf("posX = %f\n",posX);
+//    printf("posY = %f\n",posY);
+//    printf("width = %f\n",width);
+//    printf("height = %f\n",height);
+//    printf("gap = %f\n",gap);
+//    printf("nBotao = %f\n",nBotao);
+//    printf("larguraBorda = %f\n",larguraBorda);
+//    printf("isEmCima = %d\n",isEmCima);
+
     Rectangle button = criaRetangulo(posX, posY, width, height, gap, nBotao);
     DrawRectangleRec(button, isEmCima ? corSecundaria : corPadrao);
     if(larguraBorda){
@@ -53,6 +62,7 @@ Rectangle abreModal(float posX, float posY, float width, float height, float sce
 }
 
 void abreModalDeConfirmacao(char texto[], int tamanhoFonte, float margin, int alturaModal, int larguraModal, int larguraTela, int alturaTela , int* isAbertaModal){
+
     int larguraModalCalculada = MeasureText(texto, tamanhoFonte) + 2*(margin);
 
     if(larguraModalCalculada > larguraModal){
@@ -91,7 +101,7 @@ void abreModalDeConfirmacao(char texto[], int tamanhoFonte, float margin, int al
     DrawText(botaoTexto[0], botoesModal[0].x + margin, botoesModal[0].y + margin, tamanhoFonte, BLACK);
     DrawText(botaoTexto[1], botoesModal[1].x + margin, botoesModal[1].y + margin, tamanhoFonte, BLACK);
 
-    if (CheckCollisionPointRec(GetMousePosition(), botoesModal[1]) && isAbertaModal){
+    if (CheckCollisionPointRec(GetMousePosition(), botoesModal[1]) && *isAbertaModal){
         if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
             *isAbertaModal = FALSE;
         }

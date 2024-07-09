@@ -1,42 +1,5 @@
-#include <string.h>
-
-#include "raylib.h"
-#include "../lib/charactions.h"
-#include "../lib/utils.h"
-
-#define LARGURA 1200
-#define ALTURA 600
-
-#define TRUE 1
-#define FALSE 0
-
-#define GAP_ENTRE_BOTOES 110
-
-#define NAO_TOCA_BOTAO -1
-#define BOTAO_NOVO_JOGO 0
-#define BOTAO_CARREGAR_JOGO 1
-#define BOTAO_SAIR 2
-
-static const char *labelBotoes[] = {
-    "NOVO JOGO",
-    "CARREGAR JOGO",
-    "SAIR"
-};
-
-int menuInicial(void);
-
-int main(void){
-    char TITULO[10] = "INFmon";
-    InitWindow(LARGURA, ALTURA, TITULO);  //Inicializa janela, com certo tamanho e tıtulo
-    SetTargetFPS(60);   // Ajusta a execucao do jogo para 60 frames por segundo
-
-    menuInicial();
-
-    CloseWindow();  //Fecha a janela e o contexto OpenGL
-    return 0;
-}
-
-int menuInicial(void){
+int funcaoInicial(void){
+    int processoAtual = NENHUM_BOTAO;
     int NUM_BOTOES = 3;
     char TITULO[10] = "INFmon";
 
@@ -46,12 +9,15 @@ int menuInicial(void){
     int posMeioY = ALTURA/2, posMeioX = LARGURA/2;
     int isFecharJanela = FALSE;
     int isAbertaModal = FALSE;
+    InitWindow(LARGURA, ALTURA, TITULO);  //Inicializa janela, com certo tamanho e tıtulo
 //
     int currentProcess = 0;
     int tituloLength = strlen(TITULO);
     int mouseCimaDeBotaoN = -1;
 
     Rectangle botoes[NUM_BOTOES] = {};
+
+    SetTargetFPS(60);   // Ajusta a execucao do jogo para 60 frames por segundo
 
     char modalTexto[50] = "Tem certeza que deseja criar um novo jogo?";
     int tamanhoFonte = 20;
@@ -91,10 +57,12 @@ int menuInicial(void){
 
                 } else if(i == BOTAO_CARREGAR_JOGO){
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        processoAtual = BOTAO_CARREGAR_JOGO;
                         CloseWindow();
                     }
                 } else if(i == BOTAO_SAIR){
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        processoAtual = BOTAO_SAIR;
                         CloseWindow();
                     }
 
@@ -109,10 +77,6 @@ int menuInicial(void){
         EndDrawing();   //Finaliza o ambiente de desenho na tela
 
     }
-    return 0;
+    CloseWindow();  //Fecha a janela e o contexto OpenGL
+    return processoAtual;
 }
-
-
-
-
-
