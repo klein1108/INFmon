@@ -1,1 +1,1 @@
-int abreModalDeConfirmacaoMenuInicial(int processoAtual);
+int menuInicial(int processoAtual);
