@@ -10,17 +10,19 @@ Color defineCorDoBotao (int indexBotao, int mouseHoverRec){
     return WHITE;
 }
 
-Rectangle criaRetangulo(float posX, float posY, float width, float height, float gap, int nRetangulo){
+//AJUSTE!!!
+Rectangle criaRetangulo(float posX, float posY, float width, float height, float gapX, float gapY, int nRetangulo){
     return (Rectangle){
-            posX,   // define X do retangulo (posicao inicial)
-            posY + (gap*nRetangulo), // define Y do retangulo (posicao inicial), com o multiplicador sendo GAP_ENTRE_BOTOES x N_BOTAO
+            posX + (gapX*nRetangulo),   // define X do retangulo (posicao inicial)
+            posY + (gapY*nRetangulo), // define Y do retangulo (posicao inicial), com o multiplicador sendo GAP_ENTRE_BOTOES x N_BOTAO
             width , //define largura do retangulo
             height };
 
 }
 
-Rectangle criaBotao(float posX, float posY, float width, float height, float gap, float nBotao, float larguraBorda, Color corPadrao, Color corSecundaria, int isEmCima){
-    Rectangle button = criaRetangulo(posX, posY, width, height, gap, nBotao);
+//AJUSTE!!!
+Rectangle criaBotao(float posX, float posY, float width, float height,float gapX, float gapY, float nBotao, float larguraBorda, Color corPadrao, Color corSecundaria, int isEmCima){
+    Rectangle button = criaRetangulo(posX, posY, width, height, gapX, gapY, nBotao);
     DrawRectangleRec(button, isEmCima ? corSecundaria : corPadrao);
     if(larguraBorda){
         DrawRectangleLinesEx(button, larguraBorda, BLACK);
@@ -28,8 +30,9 @@ Rectangle criaBotao(float posX, float posY, float width, float height, float gap
     return button;
 }
 
+//AJUSTE!!!
 Rectangle criaBotaoDeModal(float posInicialX, float posInicialY, float posFinalX, float posFinalY, Color corFundo, int larguraBorda){
-    Rectangle bottao = criaRetangulo(posInicialX, posInicialY, posFinalX, posFinalY, 0, 0);
+    Rectangle bottao = criaRetangulo(posInicialX, posInicialY, posFinalX, posFinalY, 0, 0, 0);
 
     DrawRectangle(bottao.x, bottao.y, bottao.width, bottao.height, corFundo);
     if(larguraBorda){
@@ -38,10 +41,10 @@ Rectangle criaBotaoDeModal(float posInicialX, float posInicialY, float posFinalX
     return bottao;
 }
 
-
+//AJUSTE!!!
 Rectangle abreModal(float posX, float posY, float width, float height, float sceenWidth, float screenHeight, float larguraLinha){
     Color background = { 130, 130, 130, 100};
-    Rectangle modal = criaRetangulo(posX, posY, width, height, 0.0f, 0);
+    Rectangle modal = criaRetangulo(posX, posY, width, height, 0.0f, 0, 0);
 
     DrawRectangle(0, 0, sceenWidth, screenHeight, background); //background cinza com 100 de transparencia
 
