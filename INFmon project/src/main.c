@@ -41,7 +41,6 @@ int main(void){
             break;
 
         case PROCESSO_CARREGAR_JOGO:
-            //NOVO TESTE!!
             menuBatalha(processoAtual);
 //            printf("\n\n\t\tFAZER PARTE DE CONTINUAR JOGO\n\n");
             break;

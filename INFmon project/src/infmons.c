@@ -1,4 +1,3 @@
-//NOVO!
 #include<string.h>
 #include "../lib/infmons.h"
 

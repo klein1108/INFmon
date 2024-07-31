@@ -3,6 +3,22 @@
 #define TRUE 1
 #define FALSE 0
 
+#define ALTURA 600
+#define LARGURA 1200
+
+#define BOTAO_PRIMEIRA_COL 35.0F
+#define BOTAO_SEGUNDA_COL 20.0F
+
+#define BOTAO_PRIMEIRA_LIN 35.0f
+#define BOTAO_SEGUNDA_LIN 20.0F
+
+#define TEXTO_PRIMEIRA_COL 20.0F
+#define TEXTO_SEGUNDA_COL 5.0F
+
+#define TEXTO_PRIMEIRA_LIN 0.0F
+#define TEXTO_SEGUNDA_LIN 10.0f
+
+
 Color defineCorDoBotao (int indexBotao, int mouseHoverRec){
     if(mouseHoverRec == indexBotao){
         return SKYBLUE;
@@ -107,4 +123,39 @@ int abreModalDeConfirmacaoMenuInicial(char texto[], int tamanhoFonte, float marg
     }
 
     return isAceita;    //retorna o que o usuario escolheu das opceos de botoes
+}
+
+void criaInterface(Rectangle *botao, char texto[], int index){
+    float widthBotoes = 200.0f;
+    float heightBotoes = 100.0f;
+    float modalLarguraLinha = 4.0f;
+
+
+    switch(index){
+        case 0 :
+            *botao = criaBotao(LARGURA - 2*widthBotoes - 35, ALTURA - 2*heightBotoes - 35, widthBotoes, heightBotoes, 0, 0, 0, modalLarguraLinha, WHITE, WHITE, 0);
+            DrawText(texto, LARGURA - 2*widthBotoes - 20, ALTURA - 2*heightBotoes, 40, BLACK);
+        break;
+
+        case 1:
+            *botao = criaBotao(LARGURA - widthBotoes - 20, ALTURA - 2*heightBotoes - 35, widthBotoes, heightBotoes, 0, 0, 0, modalLarguraLinha, WHITE, WHITE, 0);
+            DrawText(texto, LARGURA - widthBotoes - 5, ALTURA - 2*heightBotoes, 40, BLACK);
+        break;
+
+        case 2:
+            *botao = criaBotao(LARGURA - 2*widthBotoes - 35, ALTURA - heightBotoes - 20, widthBotoes, heightBotoes, 0, 0, 0, modalLarguraLinha, WHITE, WHITE, 0);
+            DrawText(texto, LARGURA - 2*widthBotoes - 20, ALTURA - heightBotoes + 10, 40, BLACK);
+        break;
+
+        case 3:
+            *botao = criaBotao(LARGURA - widthBotoes - 20, ALTURA - heightBotoes - 20, widthBotoes, heightBotoes, 0, 0, 0, modalLarguraLinha, WHITE, WHITE, 0);
+            DrawText("Sair", LARGURA - widthBotoes - 5, ALTURA - heightBotoes + 10, 40, BLACK);
+        break;
+    }
+
+
+
+
+
+
 }

@@ -174,13 +174,12 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
     return processoAtual;
 }
 
-//NOVO!
 void menuBatalha(int processoAtual){
     int isFecharJanela = FALSE;
 
     Infmon inimigo = criaPokemonInimigoFogo();
     Infmon aliado = criaPokemonAliadoAgua();
-    float bordaInferiorAltura = 200.0f;
+    float bordaInferiorAltura = 250.0f;
     float modalLarguraLinha = 4.0;
 
     int NUM_BOTOES = 4;
@@ -195,100 +194,116 @@ void menuBatalha(int processoAtual){
         float posYButton = (posY + (bordaInferiorAltura/2) - 2*(modalLarguraLinha));
         float gapX = (float)GAP_ENTRE_BOTOES;
 
+        int isAcao = FALSE;
+        double testeTime = 0;
         int mouseCimaDeBotaoN = 0;
 
-        Rectangle botoes[NUM_BOTOES] = {};
+        Rectangle botoes[NUM_BOTOES];
 
         int danoTotal = 0;
         printf("Vida inimigo: %d\n", inimigo.vida);
-
-    while (!WindowShouldClose() && !isFecharJanela && processoAtual == PROCESSO_CARREGAR_JOGO){
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        Rectangle retanguloBordaInferior = criaRetangulo(posX, posY, LARGURA, bordaInferiorAltura, 0, 0, 1);
-        DrawRectangleRec(retanguloBordaInferior, GRAY);
-        DrawRectangleLinesEx(retanguloBordaInferior, modalLarguraLinha, BLACK);
 
         float alturaInfmon = 200.0f;
         float larguraInfmon = alturaInfmon;
         float posYInfmon = posY - alturaInfmon - (modalLarguraLinha);
         float posXInfmon = (modalLarguraLinha);
-        Rectangle nossoINFmon = criaRetangulo(posXInfmon, posYInfmon, larguraInfmon, alturaInfmon, 0, 0, 1);
-        DrawRectangleRec(nossoINFmon, BLUE);
-        DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
-
         float posYInimigo = 0;
         float posXInimigo = LARGURA - larguraInfmon - (modalLarguraLinha);
 
-        Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
-        DrawRectangleRec(delesINFmon, RED);
-        DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
+        while (!WindowShouldClose() && !isFecharJanela && processoAtual == PROCESSO_CARREGAR_JOGO){
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
 
-        for (int i = 0; i < NUM_BOTOES; i++){
+            Rectangle retanguloBordaInferior = criaRetangulo(posX, posY, LARGURA, bordaInferiorAltura, 0, 0, 1);
+            DrawRectangleRec(retanguloBordaInferior, GRAY);
+            DrawRectangleLinesEx(retanguloBordaInferior, modalLarguraLinha, BLACK);
 
-            if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
-                mouseCimaDeBotaoN = i;
+
+            Rectangle nossoINFmon = criaRetangulo(posXInfmon, posYInfmon, larguraInfmon, alturaInfmon, 0, 0, 1);
+            DrawRectangleRec(nossoINFmon, BLUE);
+            DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
 
 
-                switch(mouseCimaDeBotaoN){
-                    case 0:
-                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                            printf("ATAQUE %s\n", aliado.ataques[i].nome);
+            Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
+            DrawRectangleRec(delesINFmon, RED);
+            DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
 
-                            if(inimigo.vida > 0){
-                                //calculo Dano
-                                danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-                                inimigo.vida -=danoTotal;
-                                printf("Dano total: %d\n", danoTotal);
-                                printf("Vida inimigo: %d\n", inimigo.vida);
-                            }
-                        } break;
+            for (int i = 0; i < NUM_BOTOES; i++){
 
-                    case 1:
-                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                            printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
+                    mouseCimaDeBotaoN = i;
 
-                            if(inimigo.vida > 0){
-                                //calculo Dano
-                                danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-                                inimigo.vida -=danoTotal;
-                                printf("Dano total: %d\n", danoTotal);
-                                printf("Vida inimigo: %d\n", inimigo.vida);
-                            }
-                        } break;
 
-                    case 2:
-                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                            printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                    switch(mouseCimaDeBotaoN){
+                        case 0:
+                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                                printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                                testeTime = GetTime() + (double)3;
+                                if(inimigo.vida > 0){
+                                    isAcao = TRUE;
+                                    //calculo Dano
+                                    danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+                                    inimigo.vida -=danoTotal;
+                                    printf("Dano total: %d\n", danoTotal);
+                                    printf("Vida inimigo: %d\n", inimigo.vida);
+                                }
+                            } break;
 
-                            if(inimigo.vida > 0){
-                                //calculo Dano
-                                danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-                                inimigo.vida -=danoTotal;
-                                printf("Dano total: %d\n", danoTotal);
-                                printf("Vida inimigo: %d\n", inimigo.vida);
-                            }
-                        } break;
+                        case 1:
+                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                                printf("ATAQUE %s\n", aliado.ataques[i].nome);
 
-                    case 3:
-                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                            printf("SAIR");
-                        } break;
+                                if(inimigo.vida > 0){
+
+                                    //calculo Dano
+                                    danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+                                    inimigo.vida -=danoTotal;
+                                    printf("Dano total: %d\n", danoTotal);
+                                    printf("Vida inimigo: %d\n", inimigo.vida);
+                                }
+                            } break;
+
+                        case 2:
+                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                                printf("ATAQUE %s\n", aliado.ataques[i].nome);
+
+                                if(inimigo.vida > 0){
+                                    //calculo Dano
+                                    danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+                                    inimigo.vida -=danoTotal;
+                                    printf("Dano total: %d\n", danoTotal);
+                                    printf("Vida inimigo: %d\n", inimigo.vida);
+                                }
+                            } break;
+
+                        case 3:
+                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                                printf("SAIR");
+                            } break;
+                    }
+
                 }
 
-            }
-            botoes[i] = criaBotao(posXButton, posYButton, width, height,gapX, 0, i, modalLarguraLinha, WHITE, WHITE, 0);
-            if(i == 3){
-                DrawText("Sair", (int)(posXButton + 8 + (gapX*3)), (int) posYButton, 24, BLACK);
-            } else {
-                DrawText(aliado.ataques[i].nome, (int)(posXButton + 8 + (gapX*i)), (int) posYButton, 24, BLACK);
-            }
-        }
+                if(isAcao && GetTime() < testeTime){
+                    DrawText("Ocorreu uma acao realizada pelo jogador muito texto para testar e afins e tals", posX, posY, 24, BLACK);
+                    printf("TEMPO = %lf\n", testeTime);
 
+
+                } else {
+                    isAcao = FALSE;
+                    criaInterface(&botoes[i], aliado.ataques[i].nome, i);
+                }
+
+
+                /*botoes[i] = criaBotao(posXButton, posYButton, width, height,gapX, 0, i, modalLarguraLinha, WHITE, WHITE, 0);
+                if(i == 3){
+                    DrawText("Sair", (int)(posXButton + 8 + (gapX*3)), (int) posYButton, 24, BLACK);
+                } else {
+                    DrawText(aliado.ataques[i].nome, (int)(posXButton + 8 + (gapX*i)), (int) posYButton, 24, BLACK);
+                }*/
+            }
 
         EndDrawing();
     }
-
 
 }

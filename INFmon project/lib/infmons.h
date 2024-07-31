@@ -1,4 +1,3 @@
-//NOVO!
 #define N_ATAQUES 3
 #define MAX_INFMONS 5
 
