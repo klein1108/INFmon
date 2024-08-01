@@ -30,3 +30,4 @@ typedef struct {
 
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
+void adicionaINFmon(char escolha);

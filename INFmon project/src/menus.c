@@ -124,6 +124,10 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
     static const char texto[40] = "Escolha seu INFmon inicial";
     int textoLength = strlen(texto);
 
+    //TESTE
+    char escolhidoTeste = ' ';
+
+
     processoAtual = PROCESSO_ESCOLHER_INFMON;
 
     while(!WindowShouldClose() && processoAtual == PROCESSO_ESCOLHER_INFMON){
@@ -141,25 +145,35 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
                     switch(mouseCimaDeBotaoN){
                         case 0:
                             if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                *escolhido = 0;
+
+                                *escolhido = 1;
+                                escolhidoTeste = 'F';
                                 //processoAtual = proxima etapa
                             } break;
 
                         case 1:
                             if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                *escolhido = 1;
+                                *escolhido = 2;
+                                escolhidoTeste = 'A';
                                 //processoAtual = proxima etapa
                             } break;
 
                         case 2:
                             if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                *escolhido = 2;
+                                *escolhido = 3;
+                                escolhidoTeste = 'T';
                                 //processoAtual = proxima etapa
                             } break;
 
                     }
 
                 }
+
+                if(escolhidoTeste != ' '){
+                    adicionaINFmon(escolhidoTeste);
+                }
+
+                printf("ESCOLHIDO: %d", *escolhido);
 
                 //AJUSTE!!!
                 infmons[i] = criaBotao(LARGURA/2 -150, 150.0f, 100.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES, i, 5.0f, WHITE, corInfmons[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
