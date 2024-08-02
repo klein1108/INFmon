@@ -1,1 +1,1 @@
-void inicializaMapa();
+void inicializaMapa(int processoAtual);

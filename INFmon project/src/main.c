@@ -16,6 +16,7 @@
 #define PROCESSO_NOVO_JOGO 1
 #define PROCESSO_CARREGAR_JOGO 2
 #define PROCESSO_ESCOLHER_INFMON 3
+#define PROCESSO_INICIA_JOGO 4
 
 static const char *labelBotoes[] = {
     "NOVO JOGO",
@@ -45,10 +46,11 @@ int main(void){
             menuBatalha(processoAtual);
 //            printf("\n\n\t\tFAZER PARTE DE CONTINUAR JOGO\n\n");
             break;
-
     }
 
-    inicializaMapa();
+    if(processoAtual == PROCESSO_INICIA_JOGO){
+        inicializaMapa(processoAtual);
+    }
 
     CloseWindow();                                          //Fecha a janela e o contexto OpenGL
     return 0;

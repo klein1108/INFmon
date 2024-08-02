@@ -23,6 +23,7 @@
 #define PROCESSO_CARREGAR_JOGO 2
 
 #define PROCESSO_ESCOLHER_INFMON 3
+#define PROCESSO_INICIA_JOGO 4
 
 static const char *labelBotoes[] = {
     "NOVO JOGO",
@@ -171,6 +172,7 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
 
                 if(escolhidoTeste != ' '){
                     adicionaINFmon(escolhidoTeste);
+                    processoAtual = PROCESSO_INICIA_JOGO;
                 }
 
                 printf("ESCOLHIDO: %d", *escolhido);
