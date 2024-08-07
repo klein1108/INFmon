@@ -40,7 +40,7 @@ Infmon criaPokemonInimigoFogo(){
     ataqueMedio.dano = 3;
     ataqueBasico.tipo = TIPO_NORMAL;
 
-    strcpy(ataqueForte.nome, "Xingar de Fogo");
+    strcpy(ataqueForte.nome, "Xingar");
     ataqueForte.dano = 5;
     ataqueBasico.tipo = TIPO_FOGO;
 
@@ -118,82 +118,82 @@ void leArquivosDeAtaques(){
 }
 
 
-//void criaArquivoDeAtaques(){
-//    FILE *arq;
-//
-//    //ATAQUES TIPO NORMAL
-//    Ataque ataqueNormalUm;
-//    ataqueNormalUm.dano = 2;
-//    strcpy(ataqueNormalUm.nome, "Morder");
-//
-//    Ataque ataqueNormalDois;
-//    ataqueNormalDois.dano = 2;
-//    strcpy(ataqueNormalDois.nome, "Arranhar");
-//
-//    Ataque ataqueNormalTres;
-//    ataqueNormalTres.dano = 2;
-//    strcpy(ataqueNormalTres.nome, "Cabeçada");
-//
-//    //ATAQUES TIPO AGUA
-//    Ataque ataqueAguaUm;
-//    ataqueAguaUm.dano = 4;
-//    strcpy(ataqueAguaUm.nome, "Molhar");
-//
-//    Ataque ataqueAguaDois;
-//    ataqueAguaDois.dano = 4;
-//    strcpy(ataqueAguaDois.nome, "Chover");
-//
-//    Ataque ataqueAguaTres;
-//    ataqueAguaTres.dano = 4;
-//    strcpy(ataqueAguaTres.nome, "Gotejar");
-//
-//    //ATAQUES TIPO FOGO
-//    Ataque ataqueFogoUm;
-//    ataqueFogoUm.dano = 4;
-//    strcpy(ataqueFogoUm.nome, "Queimar");
-//
-//    Ataque ataqueFogoDois;
-//    ataqueFogoDois.dano = 4;
-//    strcpy(ataqueFogoDois.nome, "Assar");
-//
-//    Ataque ataqueFogoTres;
-//    ataqueFogoTres.dano = 4;
-//    strcpy(ataqueFogoTres.nome, "Fumar");
-//
-//    //ATAQUES TIPO TERRA
-//    Ataque ataqueTerraUm;
-//    ataqueTerraUm.dano = 4;
-//    strcpy(ataqueTerraUm.nome, "Plantar");
-//
-//    Ataque ataqueTerraDois;
-//    ataqueTerraDois.dano = 4;
-//    strcpy(ataqueTerraDois.nome, "Colher");
-//
-//    Ataque ataqueTerraTres;
-//    ataqueTerraTres.dano = 4;
-//    strcpy(ataqueTerraTres.nome, "Florir");
-//
-//    Ataque ataques[12] = {
-//        ataqueNormalUm, ataqueNormalDois, ataqueNormalTres,
-//        ataqueAguaUm, ataqueAguaDois, ataqueAguaTres,
-//        ataqueFogoUm, ataqueFogoDois, ataqueFogoTres,
-//        ataqueTerraUm, ataqueTerraDois, ataqueTerraTres
-//    };
-//
-//    arq = fopen("ataques.bin", "wb");
-//    if(arq == NULL){
-//        printf("\nERRO AO ABRIR ARQUIVO\n");
-//    } else {
-//        for(int i = 0; i < 12; i++){
-//            if(!(fwrite(&ataques[i], sizeof(Ataque), 1, arq))){
-//                printf("\nERRO AO CRIAR ARQUIVO\n");
-//            } else {
-//                printf("\nDADO %d INSERIDO COM SUCESSO!\n", i+1);
-//            }
-//        }
-//        fclose(arq);
-//    }
-//}
+void criaArquivoDeAtaques(){
+    FILE *arq;
+
+    //ATAQUES TIPO NORMAL
+    Ataque ataqueNormalUm;
+    ataqueNormalUm.dano = 2;
+    strcpy(ataqueNormalUm.nome, "Morder");
+
+    Ataque ataqueNormalDois;
+    ataqueNormalDois.dano = 2;
+    strcpy(ataqueNormalDois.nome, "Arranhar");
+
+    Ataque ataqueNormalTres;
+    ataqueNormalTres.dano = 2;
+    strcpy(ataqueNormalTres.nome, "Cabeçada");
+
+    //ATAQUES TIPO AGUA
+    Ataque ataqueAguaUm;
+    ataqueAguaUm.dano = 4;
+    strcpy(ataqueAguaUm.nome, "Molhar");
+
+    Ataque ataqueAguaDois;
+    ataqueAguaDois.dano = 4;
+    strcpy(ataqueAguaDois.nome, "Chover");
+
+    Ataque ataqueAguaTres;
+    ataqueAguaTres.dano = 4;
+    strcpy(ataqueAguaTres.nome, "Gotejar");
+
+    //ATAQUES TIPO FOGO
+    Ataque ataqueFogoUm;
+    ataqueFogoUm.dano = 4;
+    strcpy(ataqueFogoUm.nome, "Queimar");
+
+    Ataque ataqueFogoDois;
+    ataqueFogoDois.dano = 4;
+    strcpy(ataqueFogoDois.nome, "Assar");
+
+    Ataque ataqueFogoTres;
+    ataqueFogoTres.dano = 4;
+    strcpy(ataqueFogoTres.nome, "Fumar");
+
+    //ATAQUES TIPO TERRA
+    Ataque ataqueTerraUm;
+    ataqueTerraUm.dano = 4;
+    strcpy(ataqueTerraUm.nome, "Plantar");
+
+    Ataque ataqueTerraDois;
+    ataqueTerraDois.dano = 4;
+    strcpy(ataqueTerraDois.nome, "Colher");
+
+    Ataque ataqueTerraTres;
+    ataqueTerraTres.dano = 4;
+    strcpy(ataqueTerraTres.nome, "Florir");
+
+    Ataque ataques[12] = {
+        ataqueNormalUm, ataqueNormalDois, ataqueNormalTres,
+        ataqueAguaUm, ataqueAguaDois, ataqueAguaTres,
+        ataqueFogoUm, ataqueFogoDois, ataqueFogoTres,
+        ataqueTerraUm, ataqueTerraDois, ataqueTerraTres
+    };
+
+    arq = fopen("ataques.bin", "wb");
+    if(arq == NULL){
+        printf("\nERRO AO ABRIR ARQUIVO\n");
+    } else {
+        for(int i = 0; i < 12; i++){
+            if(!(fwrite(&ataques[i], sizeof(Ataque), 1, arq))){
+                printf("\nERRO AO CRIAR ARQUIVO\n");
+            } else {
+                printf("\nDADO %d INSERIDO COM SUCESSO!\n", i+1);
+            }
+        }
+        fclose(arq);
+    }
+}
 
 
 void adicionaINFmon(char escolha){

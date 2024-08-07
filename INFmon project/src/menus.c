@@ -44,6 +44,16 @@ int menuInicial(int processoAtual){
 
         for (int i = 0; i < NUM_BOTOES; i++){
 
+
+            if(IsKeyPressed(KEY_N))
+                isAbertaModal = TRUE;
+            if(IsKeyPressed(KEY_C))
+                processoAtual = PROCESSO_CARREGAR_JOGO;
+            if(IsKeyPressed(KEY_Q)){
+                EndDrawing();
+                CloseWindow();
+            }
+
             if(CheckCollisionPointRec(GetMousePosition(), botoes[i]) && !isAbertaModal){
                 mouseCimaDeBotaoN = i;
 
@@ -154,7 +164,7 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
                 if(escolhidoTeste != ' '){
                     adicionaINFmon(escolhidoTeste);
 //                    criaArquivoDeAtaques();
-//                    leArquivosDeAtaques();
+                    leArquivosDeAtaques();
                     processoAtual = PROCESSO_INICIA_JOGO;
                 }
 

@@ -26,5 +26,5 @@ typedef struct {
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
 void adicionaINFmon(char escolha);
-//void criaArquivoDeAtaques();
+void criaArquivoDeAtaques();
 void leArquivosDeAtaques();

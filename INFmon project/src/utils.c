@@ -113,6 +113,7 @@ int abreModalDeConfirmacaoMenuInicial(char texto[], int tamanhoFonte, float marg
     //Logica botoes
     if (CheckCollisionPointRec(GetMousePosition(), botoesModal[0]) && *isAbertaModal){
         if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
             *isAbertaModal = FALSE;
             isAceita = TRUE;
         }
@@ -120,6 +121,14 @@ int abreModalDeConfirmacaoMenuInicial(char texto[], int tamanhoFonte, float marg
         if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
             *isAbertaModal = FALSE;
         }
+    }
+
+    if(IsKeyPressed(KEY_C)){
+        *isAbertaModal = FALSE;
+        isAceita = TRUE;
+    }
+    if(IsKeyPressed(KEY_S)){
+        *isAbertaModal = FALSE;
     }
 
     return isAceita;    //retorna o que o usuario escolheu das opceos de botoes
