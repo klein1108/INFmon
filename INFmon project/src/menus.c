@@ -153,6 +153,8 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
 
                 if(escolhidoTeste != ' '){
                     adicionaINFmon(escolhidoTeste);
+//                    criaArquivoDeAtaques();
+//                    leArquivosDeAtaques();
                     processoAtual = PROCESSO_INICIA_JOGO;
                 }
 

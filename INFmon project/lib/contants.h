@@ -20,6 +20,7 @@
 #define N_ATAQUES 3
 #define MAX_INFMONS 5
 
+#define TIPO_NORMAL 'N'
 #define TIPO_AGUA 'A'
 #define TIPO_FOGO 'F'
 #define TIPO_TERRA 'T'
@@ -45,4 +46,5 @@
 
 #define PROCESSO_INTERNO_MAPA 0
 #define PROCESSO_INTERNO_BATALHA 1
+
 

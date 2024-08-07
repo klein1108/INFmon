@@ -3,6 +3,7 @@
 typedef struct {
     char nome[50];
     int dano;
+    char tipo;
 } Ataque;
 
 typedef struct {
@@ -25,3 +26,5 @@ typedef struct {
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
 void adicionaINFmon(char escolha);
+//void criaArquivoDeAtaques();
+void leArquivosDeAtaques();
