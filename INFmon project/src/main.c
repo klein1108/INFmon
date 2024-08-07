@@ -4,19 +4,7 @@
 #include "raylib.h"
 #include "../lib/menus.h"
 #include "../lib/mapa.h"
-
-#define LARGURA 1200
-#define ALTURA 600
-
-#define TRUE 1
-#define FALSE 0
-
-//NAO MUDAR ORDEM
-#define PROCESSO_MENU_INICIAL 0
-#define PROCESSO_NOVO_JOGO 1
-#define PROCESSO_CARREGAR_JOGO 2
-#define PROCESSO_ESCOLHER_INFMON 3
-#define PROCESSO_INICIA_JOGO 4
+#include "../lib/contants.h"
 
 static const char *labelBotoes[] = {
     "NOVO JOGO",
@@ -34,6 +22,8 @@ int main(void){
     InitWindow(LARGURA, ALTURA, TITULO);                    //Inicializa janela, com certo tamanho e tıtulo
     SetTargetFPS(60);                                       // Ajusta a execucao do jogo para 60 frames por segundo
 
+    //verifica integridade de arquivos iniciais
+
     processoAtual = menuInicial(processoAtual);
 
     switch(processoAtual){
@@ -43,8 +33,8 @@ int main(void){
             break;
 
         case PROCESSO_CARREGAR_JOGO:
-            menuBatalha(processoAtual);
-//            printf("\n\n\t\tFAZER PARTE DE CONTINUAR JOGO\n\n");
+//            menuBatalha(processoAtual);
+            printf("\n\n\t\tFAZER PARTE DE CONTINUAR JOGO\n\n");
             break;
     }
 

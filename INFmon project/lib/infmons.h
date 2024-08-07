@@ -1,12 +1,4 @@
-#define N_ATAQUES 3
-#define MAX_INFMONS 5
-
-#define TIPO_AGUA 'A'
-#define TIPO_FOGO 'F'
-#define TIPO_TERRA 'T'
-
-#define ATAQUE_DEFESA_DEFAULT 2
-
+#include "contants.h"
 
 typedef struct {
     char nome[50];
@@ -26,6 +18,8 @@ typedef struct {
 
 typedef struct {
     Infmon infmons[MAX_INFMONS];
+    int posX;
+    int posY;
 } Personagem;
 
 Infmon criaPokemonAliadoAgua();

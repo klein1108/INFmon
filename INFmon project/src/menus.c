@@ -1,29 +1,10 @@
+#include <string.h>
+
 #include "raylib.h"
 #include "../lib/utils.h"
 #include "../lib/infmons.h"
 
-#include <string.h>
-
-#define LARGURA 1200
-#define ALTURA 600
-
-#define TRUE 1
-#define FALSE 0
-
-#define GAP_ENTRE_BOTOES 110
-
-//NAO MUDAR ORDEM
-#define BOTAO_NOVO_JOGO 0
-#define BOTAO_CARREGAR_JOGO 1
-#define BOTAO_SAIR 2
-
-//NAO MUDAR ORDEM
-#define PROCESSO_MENU_INICIAL 0
-#define PROCESSO_NOVO_JOGO 1
-#define PROCESSO_CARREGAR_JOGO 2
-
-#define PROCESSO_ESCOLHER_INFMON 3
-#define PROCESSO_INICIA_JOGO 4
+#include "../lib/contants.h"
 
 static const char *labelBotoes[] = {
     "NOVO JOGO",
@@ -190,8 +171,10 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
     return processoAtual;
 }
 
-void menuBatalha(int processoAtual){
+int menuBatalha(int *processoInternoAtual){
     int isFecharJanela = FALSE;
+
+    int resultadoBatalha = BATALHA_DERROTA;
 
     Infmon inimigo = criaPokemonInimigoFogo();
     Infmon aliado = criaPokemonAliadoAgua();
@@ -226,7 +209,7 @@ void menuBatalha(int processoAtual){
         float posYInimigo = 0;
         float posXInimigo = LARGURA - larguraInfmon - (modalLarguraLinha);
 
-        while (!WindowShouldClose() && !isFecharJanela && processoAtual == PROCESSO_CARREGAR_JOGO){
+        while (!WindowShouldClose() && !isFecharJanela && *processoInternoAtual == PROCESSO_INTERNO_BATALHA){
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
@@ -294,8 +277,11 @@ void menuBatalha(int processoAtual){
 
                         case 3:
                             if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                printf("SAIR");
-                            } break;
+                                resultadoBatalha = BATALHA_FUGA;
+                                *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+
+                            }
+                            break;
                     }
 
                 }
@@ -309,17 +295,10 @@ void menuBatalha(int processoAtual){
                     isAcao = FALSE;
                     criaInterface(&botoes[i], aliado.ataques[i].nome, i);
                 }
-
-
-                /*botoes[i] = criaBotao(posXButton, posYButton, width, height,gapX, 0, i, modalLarguraLinha, WHITE, WHITE, 0);
-                if(i == 3){
-                    DrawText("Sair", (int)(posXButton + 8 + (gapX*3)), (int) posYButton, 24, BLACK);
-                } else {
-                    DrawText(aliado.ataques[i].nome, (int)(posXButton + 8 + (gapX*i)), (int) posYButton, 24, BLACK);
-                }*/
             }
 
         EndDrawing();
     }
 
+    return resultadoBatalha;
 }
