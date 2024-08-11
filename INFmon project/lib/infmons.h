@@ -1,4 +1,10 @@
+#ifndef infmons_h
+#define infmons_h
+
+
 #include "contants.h"
+#include<stdio.h>
+#include<string.h>
 
 typedef struct {
     char nome[50];
@@ -28,3 +34,4 @@ Infmon criaPokemonInimigoFogo();
 void adicionaINFmon(char escolha);
 void criaArquivoDeAtaques();
 void leArquivosDeAtaques();
+#endif // infmons_h

@@ -1,10 +1,4 @@
-#include <string.h>
-
-#include "raylib.h"
-#include "../lib/utils.h"
-#include "../lib/infmons.h"
-
-#include "../lib/contants.h"
+#include "../lib/menus.h"
 
 static const char *labelBotoes[] = {
     "NOVO JOGO",
@@ -212,6 +206,8 @@ int menuBatalha(int *processoInternoAtual){
         Rectangle botoes[NUM_BOTOES];
 
         int danoTotal = 0;
+//        int processoAtualBatalha = PRCESSO_BATALHA_INICIAL;
+
         printf("Vida inimigo: %d\n", inimigo.vida);
 
         float alturaInfmon = 200.0f;
@@ -239,11 +235,11 @@ int menuBatalha(int *processoInternoAtual){
             DrawRectangleRec(delesINFmon, RED);
             DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
 
-            for (int i = 0; i < NUM_BOTOES; i++){
 
+
+            for (int i = 0; i < NUM_BOTOES; i++){
                 if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
                     mouseCimaDeBotaoN = i;
-
 
                     switch(mouseCimaDeBotaoN){
                         case 0:
@@ -314,3 +310,85 @@ int menuBatalha(int *processoInternoAtual){
 
     return resultadoBatalha;
 }
+
+//int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto){
+//
+//    int atualizaProcessoAtualBatalha = PROCESSO_BATALHA_ATAQUES;
+//
+//    int isAcao = FALSE;
+//    double testeTime = 0;
+//    int mouseCimaDeBotaoN = 0;
+//
+//    for (int i = 0; i < NUM_BOTOES; i++){
+//        if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
+//            mouseCimaDeBotaoN = i;
+//
+//            switch(mouseCimaDeBotaoN){
+//                case 0:
+//                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+//                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
+//                        testeTime = GetTime() + (double)3;
+//                        if(inimigo->vida > 0){
+//                            isAcao = TRUE;
+////                            //calculo Dano
+////                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+////                            inimigo.vida -= danoTotal;
+////                            printf("Dano total: %d\n", danoTotal);
+////                            printf("Vida inimigo: %d\n", inimigo.vida);
+//                        }
+//                    } break;
+//
+//                case 1:
+//                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+//                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
+//
+////                        if(inimigo->vida > 0){
+//
+//                            //calculo Dano
+////                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+////                            inimigo.vida -=danoTotal;
+////                            printf("Dano total: %d\n", danoTotal);
+////                            printf("Vida inimigo: %d\n", inimigo.vida);
+////                        }
+//                    } break;
+//
+//                case 2:
+//                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+//                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
+//
+////                        if(inimigo->vida > 0){
+//                            //calculo Dano
+////                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
+////                            inimigo.vida -=danoTotal;
+////                            printf("Dano total: %d\n", danoTotal);
+////                            printf("Vida inimigo: %d\n", inimigo.vida);
+////                        }
+//                    } break;
+//
+//                case 3:
+//                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+//                        atualizaProcessoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+//                        //Isso é para interface inicial
+////                        resultadoBatalha = BATALHA_FUGA;
+////                        *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+//
+//                    }
+//                    break;
+//            }
+//
+//        }
+//
+//        if(isAcao && GetTime() < testeTime){
+//            DrawText("Ocorreu uma acao realizada pelo jogador muito texto para testar e afins e tals", posX, posY, 24, BLACK);
+//            printf("TEMPO = %lf\n", testeTime);
+//
+//
+//        } else {
+//            isAcao = FALSE;
+//            criaInterface(botoes[i], aliado.ataques[i].nome, i);
+//        }
+//    }
+//
+//    return atualizaProcessoAtualBatalha;
+//}
+

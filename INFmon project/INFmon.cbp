@@ -31,8 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="lib/CONSTANTES.h" />
 		<Unit filename="lib/charactions.h" />
+		<Unit filename="lib/contants.h" />
 		<Unit filename="lib/infmons.h" />
 		<Unit filename="lib/mapa.h" />
 		<Unit filename="lib/menus.h" />

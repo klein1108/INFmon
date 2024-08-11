@@ -1,9 +1,4 @@
-#include<stdio.h>
-#include "raylib.h"
-#include "../lib/infmons.h"
-#include "../lib/menus.h"
-
-#include "../lib/contants.h"
+#include "../lib/mapa.h"
 
 void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Personagem *jogador){
     Color corPosMapa = WHITE;
@@ -37,7 +32,7 @@ void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Persona
     }
 }
 
-void moveJogador(Personagem *jogador, char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual){
+void moveJogador(Personagem *jogador, char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual, char moveJogador){
 
     if(IsKeyPressed(KEY_UP)){
         if(mapa[(jogador->posY)-1][jogador->posX] != 'W'){
@@ -126,7 +121,7 @@ void inicializaMapa(int processoAtual){
                     }
 
                     desenhaMapa(mapa, &isPrimeiraVez, &jogador);
-                    moveJogador(&jogador, mapa, &processoInternoAtual);
+                    moveJogador(&jogador, mapa, &processoInternoAtual, 'c');
                     break;
 
                 case PROCESSO_INTERNO_BATALHA:

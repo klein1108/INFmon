@@ -1,3 +1,6 @@
+#ifndef contants_h
+#define contants_h
+
 //-----DEFAULT--------------------
 #define LARGURA 1200
 #define ALTURA 600
@@ -36,6 +39,9 @@
 #define BATALHA_DERROTA 1
 #define BATALHA_VITORIA 2
 
+#define PROCESSO_BATALHA_INICIAL 0
+#define PROCESSO_BATALHA_ATAQUES 1
+
 //------MENU------------------------
 #define GAP_ENTRE_BOTOES 110
 
@@ -47,4 +53,4 @@
 #define PROCESSO_INTERNO_MAPA 0
 #define PROCESSO_INTERNO_BATALHA 1
 
-
+#endif // contants_h
