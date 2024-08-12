@@ -41,6 +41,7 @@
 
 #define PROCESSO_BATALHA_INICIAL 0
 #define PROCESSO_BATALHA_ATAQUES 1
+#define PROCESSO_BATALHA_TENTAR_FUGA 3
 
 //------MENU------------------------
 #define GAP_ENTRE_BOTOES 110

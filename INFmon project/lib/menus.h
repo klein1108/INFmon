@@ -10,5 +10,6 @@
 int menuInicial(int processoInternoAtual);
 int menuEscolheInfmon(int processoAtual, int *escolhido);
 int menuBatalha(int *processoInternoAtual);
-//int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto);
+int criaInterfaceMenuBatalhaInicial(Rectangle botoes[]);
+int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto);
 #endif // menus_h
