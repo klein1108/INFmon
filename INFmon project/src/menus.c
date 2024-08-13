@@ -13,7 +13,8 @@ int menuInicial(int processoAtual){
 
     Color corBotoes[3] = {GREEN, BLUE, RED};
 
-    int posMeioY = ALTURA/2, posMeioX = LARGURA/2;
+//    int posMeioY = ALTURA/2;
+    int posMeioX = LARGURA/2;
     int isFecharJanela = FALSE;
     int isAbertaModal = FALSE;
 
@@ -26,7 +27,7 @@ int menuInicial(int processoAtual){
     int tamanhoFonte = 20;
     float margem = 10.0f;
 
-    int alturaModal = 150;
+//    int alturaModal = 150;
 
     while (!WindowShouldClose() && !isFecharJanela && processoAtual == PROCESSO_MENU_INICIAL){
 
@@ -189,76 +190,96 @@ int menuBatalha(int *processoInternoAtual){
 
     int NUM_BOTOES = 4;
 
-    float width = 100.0f;
-        float height = 50.0f;
-        float posX = 0.0f;
+//    float width = 100.0f;
+//        float height = 50.0f;
+    float posX = 0.0f;
 
-        float posY = (ALTURA - bordaInferiorAltura);
+    float posY = (ALTURA - bordaInferiorAltura);
 
-        float posXButton = ((posX + LARGURA)/NUM_BOTOES);
-        float posYButton = (posY + (bordaInferiorAltura/2) - 2*(modalLarguraLinha));
-        float gapX = (float)GAP_ENTRE_BOTOES;
+//        float posXButton = ((posX + LARGURA)/NUM_BOTOES);
+//        float posYButton = (posY + (bordaInferiorAltura/2) - 2*(modalLarguraLinha));
+//        float gapX = (float)GAP_ENTRE_BOTOES;
 
-        int isAcao = FALSE;
-        double testeTime = 0;
-        int mouseCimaDeBotaoN = 0;
+//        int isAcao = FALSE;
+//        double testeTime = 0;
+//        int mouseCimaDeBotaoN = 0;
 
-        Rectangle botoes[NUM_BOTOES];
+    Rectangle botoes[NUM_BOTOES];
 
-        int danoTotal = 0;
-        int processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+//        int danoTotal = 0;
+    int processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
 
-        printf("Vida inimigo: %d\n", inimigo.vida);
+    printf("ENTROU EM MENU BATALHA()\n Vida inimigo: %d\n", inimigo.vida);
 
-        float alturaInfmon = 200.0f;
-        float larguraInfmon = alturaInfmon;
-        float posYInfmon = posY - alturaInfmon - (modalLarguraLinha);
-        float posXInfmon = (modalLarguraLinha);
-        float posYInimigo = 0;
-        float posXInimigo = LARGURA - larguraInfmon - (modalLarguraLinha);
+    float alturaInfmon = 200.0f;
+    float larguraInfmon = alturaInfmon;
+    float posYInfmon = posY - alturaInfmon - (modalLarguraLinha);
+    float posXInfmon = (modalLarguraLinha);
+    float posYInimigo = 0;
+    float posXInimigo = LARGURA - larguraInfmon - (modalLarguraLinha);
 
-        while (!WindowShouldClose() && !isFecharJanela && *processoInternoAtual == PROCESSO_INTERNO_BATALHA){
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
+    while (!WindowShouldClose() && !isFecharJanela && *processoInternoAtual == PROCESSO_INTERNO_BATALHA){
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
 
-            Rectangle retanguloBordaInferior = criaRetangulo(posX, posY, LARGURA, bordaInferiorAltura, 0, 0, 1);
-            DrawRectangleRec(retanguloBordaInferior, GRAY);
-            DrawRectangleLinesEx(retanguloBordaInferior, modalLarguraLinha, BLACK);
-
-
-            Rectangle nossoINFmon = criaRetangulo(posXInfmon, posYInfmon, larguraInfmon, alturaInfmon, 0, 0, 1);
-            DrawRectangleRec(nossoINFmon, BLUE);
-            DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
+        Rectangle retanguloBordaInferior = criaRetangulo(posX, posY, LARGURA, bordaInferiorAltura, 0, 0, 1);
+        DrawRectangleRec(retanguloBordaInferior, GRAY);
+        DrawRectangleLinesEx(retanguloBordaInferior, modalLarguraLinha, BLACK);
 
 
-            Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
-            DrawRectangleRec(delesINFmon, RED);
-            DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
+        Rectangle nossoINFmon = criaRetangulo(posXInfmon, posYInfmon, larguraInfmon, alturaInfmon, 0, 0, 1);
+        DrawRectangleRec(nossoINFmon, BLUE);
+        DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
 
-            switch(processoAtualBatalha){
-                case PROCESSO_BATALHA_INICIAL:
-                        processoAtualBatalha = criaInterfaceMenuBatalhaInicial(botoes);
-                    break;
-                case PROCESSO_BATALHA_ATAQUES:
-                        processoAtualBatalha = criaInterfaceMenuBatalhaAtaques(botoes, aliado, inimigo, posX, posY);
-                    break;
+        criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon);
 
-                case PROCESSO_BATALHA_TENTAR_FUGA:
-                        resultadoBatalha = BATALHA_FUGA;
-                        *processoInternoAtual = PROCESSO_INTERNO_MAPA;
-                    break;
-            }
+
+        Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
+        DrawRectangleRec(delesINFmon, RED);
+        DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
+
+        criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo);
+
+
+        switch(processoAtualBatalha){
+            case PROCESSO_BATALHA_INICIAL:
+                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha);
+                break;
+            case PROCESSO_BATALHA_ATAQUES:
+                    criaInterfaceMenuBatalhaAtaques(botoes, aliado, inimigo, posX, posY, &processoAtualBatalha);
+                break;
+
+            case PROCESSO_BATALHA_TENTAR_FUGA:
+                    resultadoBatalha = BATALHA_FUGA;
+                    *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+                    printf("AQUI\n");
+                break;
+        }
 
         EndDrawing();
     }
 
     return resultadoBatalha;
 }
+//MOVER PARA UTILS QUANDO PRONTO:
+void criaInterfaceDeVidaINFmon(int isAliado, float posXInfmon, float larguraInfmon, float posYInfmon){
+    float modalLarguraLinha = 4.0f;
+    int larguraInterface = 300;
+    int alturaInterface = 100;
+    float posX = (float)(posXInfmon + larguraInfmon + 20); //se aliado
+    if(!isAliado){
+        //se inimigo
+        posX = (float)(posXInfmon - 50 - larguraInterface);
+    }
+    Rectangle vidaINFmon = criaRetangulo(posX, posYInfmon, larguraInterface, alturaInterface, 0, 0, 1);
+    DrawRectangleRec(vidaINFmon, WHITE);
+    DrawRectangleLinesEx(vidaINFmon, modalLarguraLinha, BLACK);
 
-int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto){
+}
+
+
+void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha){
     int NUM_BOTOES = 4;
-//    int atualizaProcessoAtualBatalha = PROCESSO_BATALHA_ATAQUES;
-    int atualizaProcessoAtualBatalha = PROCESSO_BATALHA_INICIAL;
 
     int isAcao = FALSE;
     double testeTime = 0;
@@ -273,56 +294,30 @@ int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon in
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
                         testeTime = GetTime() + (double)3;
-                        if(inimigo.vida > 0){
-                            isAcao = TRUE;
-//                            //calculo Dano
-//                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-//                            inimigo.vida -= danoTotal;
-//                            printf("Dano total: %d\n", danoTotal);
-//                            printf("Vida inimigo: %d\n", inimigo.vida);
-                        }
                     } break;
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
 
-//                        if(inimigo->vida > 0){
-
-                            //calculo Dano
-//                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-//                            inimigo.vida -=danoTotal;
-//                            printf("Dano total: %d\n", danoTotal);
-//                            printf("Vida inimigo: %d\n", inimigo.vida);
-//                        }
                     } break;
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-
-//                        if(inimigo->vida > 0){
-                            //calculo Dano
-//                            danoTotal = (aliado.ataque * aliado.ataques[i].dano);
-//                            inimigo.vida -=danoTotal;
-//                            printf("Dano total: %d\n", danoTotal);
-//                            printf("Vida inimigo: %d\n", inimigo.vida);
-//                        }
                     } break;
 
                 case 3:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        atualizaProcessoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
-                        //Isso é para interface inicial
-//                        resultadoBatalha = BATALHA_FUGA;
-//                        *processoInternoAtual = PROCESSO_INTERNO_MAPA;
-
+                        *processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
                     }
                     break;
             }
 
         }
 
+
+        //TODO: MENSAGEM SEGUE ESSA ESTRUTURA, DEVE SER IMPLEMENTADO
         if(isAcao && GetTime() < testeTime){
             DrawText("Ocorreu uma acao realizada pelo jogador muito texto para testar e afins e tals", posXInicioTexto, posYInicioTexto, 24, BLACK);
             printf("TEMPO = %lf\n", testeTime);
@@ -330,30 +325,67 @@ int criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon in
 
         } else {
             isAcao = FALSE;
-            criaInterface(&botoes[i], aliado.ataques[i].nome, i);
+            if(i == NUM_BOTOES - 1){
+                criaInterface(&botoes[i], NULL, i);
+            } else {
+                criaInterface(&botoes[i], aliado.ataques[i].nome, i);
+            }
+
         }
     }
 
-    return atualizaProcessoAtualBatalha;
 }
 
-int criaInterfaceMenuBatalhaInicial(Rectangle botoes[]){
+void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha){
+    static const char *labelBotoesBatalha[] = {
+        "Atacar",
+        "Captura",
+        "Trocar",
+        "Fugir",
+    };
     int NUM_BOTOES = 4;
-    int atualizaProcessoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+
     int mouseCimaDeBotaoN = 0;
-    printf("testando\n");
 
     for (int i = 0; i < NUM_BOTOES; i++){
         if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
             mouseCimaDeBotaoN = i;
 
-//            switch(mouseCimaDeBotaoN){
-//                case 0:
-//                break;
-//
-//            }
+           switch(mouseCimaDeBotaoN){
+                case 0:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        printf("%s\n", labelBotoesBatalha[i]);
+                        *processoAtualBatalha = PROCESSO_BATALHA_ATAQUES;
+                    }
+                    break;
+
+                case 1:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        printf("%s\n", labelBotoesBatalha[i]);
+                    } break;
+
+                case 2:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        printf("%s\n", labelBotoesBatalha[i]);
+                    }
+
+                    break;
+
+                case 3:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        printf("%s\n", labelBotoesBatalha[i]);
+                        //TODO: ADICIONAR VALIDACAO DE FUGA APENAS PARA BATALHA CONTRA INFMONS
+                        //TODO: ADICIONAR CHANCE DE FUGA
+                        //TODO: ADICIONAR MENSAGENS CASO TENTATIVA DE CERTO/ERRADO
+                        *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
+                    }
+                    break;
+            }
+
         }
+
+        criaInterface(&botoes[i], labelBotoesBatalha[i], i);
     }
-    return atualizaProcessoAtualBatalha;
+
 }
 

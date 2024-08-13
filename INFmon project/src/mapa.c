@@ -111,7 +111,6 @@ void inicializaMapa(int processoAtual){
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
-
             switch(processoInternoAtual){
                 case PROCESSO_INTERNO_MAPA:
 
@@ -126,6 +125,11 @@ void inicializaMapa(int processoAtual){
 
                 case PROCESSO_INTERNO_BATALHA:
                     resultadoBatalha = menuBatalha(&processoInternoAtual);
+                    //Move char para lado para que nao volte em cima do inimigo e fique preso no menu de batalha
+                    jogador.posX = jogador.posX + 2;
+                    //depois que sai da batalha carrega o mapa
+                    processoInternoAtual = PROCESSO_INTERNO_MAPA;
+
                     break;
 
             }

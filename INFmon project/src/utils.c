@@ -158,7 +158,12 @@ void criaInterface(Rectangle *botao, char texto[], int index){
 
         case 3:
             *botao = criaBotao(LARGURA - widthBotoes - 20, ALTURA - heightBotoes - 20, widthBotoes, heightBotoes, 0, 0, 0, modalLarguraLinha, WHITE, WHITE, 0);
-            DrawText("Sair", LARGURA - widthBotoes - 5, ALTURA - heightBotoes + 10, 40, BLACK);
+            if(texto){
+                DrawText(texto, LARGURA - widthBotoes - 5, ALTURA - heightBotoes + 10, 40, BLACK);
+            } else {
+                DrawText("Voltar", LARGURA - widthBotoes - 5, ALTURA - heightBotoes + 10, 40, BLACK);
+            }
+
         break;
     }
 
