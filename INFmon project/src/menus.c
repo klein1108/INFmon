@@ -183,8 +183,22 @@ int menuBatalha(int *processoInternoAtual){
 
     int resultadoBatalha = BATALHA_DERROTA;
 
-    Infmon inimigo = criaPokemonInimigoFogo();
+    int inimigoAtual = 2;
+
+    Infmon inimigo1 = criaPokemonInimigoFogo();
+    Infmon inimigo2 = criaPokemonAliadoAgua();
+    Infmon inimigo3 = criaPokemonInimigoFogo();
+    Infmon INFmonsInimigos[3] = {
+        inimigo1, inimigo2, inimigo3
+    };
+
+//    Infmon inimigo = criaPokemonInimigoFogo();
     Infmon aliado = criaPokemonAliadoAgua();
+
+//    float vidaMaxInimigo = (float)inimigo.vida;
+//    float vidaMaxInimigo = (float)INFmonsInimigos[inimigoAtual].vida;
+//    float vidaMaxAliado = (float)aliado.vida;
+
     float bordaInferiorAltura = 250.0f;
     float modalLarguraLinha = 4.0;
 
@@ -209,7 +223,7 @@ int menuBatalha(int *processoInternoAtual){
 //        int danoTotal = 0;
     int processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
 
-    printf("ENTROU EM MENU BATALHA()\n Vida inimigo: %d\n", inimigo.vida);
+//    printf("ENTROU EM MENU BATALHA()\n Vida inimigo: %d\n", inimigo.vida);
 
     float alturaInfmon = 200.0f;
     float larguraInfmon = alturaInfmon;
@@ -231,14 +245,16 @@ int menuBatalha(int *processoInternoAtual){
         DrawRectangleRec(nossoINFmon, BLUE);
         DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
 
-        criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon);
+        criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon, aliado);
 
 
         Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
-        DrawRectangleRec(delesINFmon, RED);
+
+        Color tipo = retornaCorDoTipo(INFmonsInimigos[inimigoAtual].tipo);
+        DrawRectangleRec(delesINFmon, tipo);
         DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
 
-        criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo);
+        criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo, INFmonsInimigos[inimigoAtual]);
 
 
         switch(processoAtualBatalha){
@@ -246,7 +262,7 @@ int menuBatalha(int *processoInternoAtual){
                     criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha);
                 break;
             case PROCESSO_BATALHA_ATAQUES:
-                    criaInterfaceMenuBatalhaAtaques(botoes, aliado, inimigo, posX, posY, &processoAtualBatalha);
+                    criaInterfaceMenuBatalhaAtaques(botoes, aliado, &INFmonsInimigos[inimigoAtual], posX, posY, &processoAtualBatalha, &inimigoAtual);
                 break;
 
             case PROCESSO_BATALHA_TENTAR_FUGA:
@@ -261,29 +277,94 @@ int menuBatalha(int *processoInternoAtual){
 
     return resultadoBatalha;
 }
+
+//TROCAR LOCAL DE CRIACAO DA FUNCAO
+Color retornaCorDoTipo(char tipo){
+    Color response;
+    switch(tipo){
+        case TIPO_AGUA:
+            response = BLUE;
+            break;
+        case TIPO_TERRA:
+            response = GREEN;
+            break;
+        case TIPO_FOGO:
+            response = RED;
+            break;
+        default:
+            response = GRAY;
+    }
+    return response;
+}
 //MOVER PARA UTILS QUANDO PRONTO:
-void criaInterfaceDeVidaINFmon(int isAliado, float posXInfmon, float larguraInfmon, float posYInfmon){
+void criaInterfaceDeVidaINFmon(int isAliado, float posXInfmon, float larguraInfmon, float posYInfmon, Infmon infmon){
+    int gapBotaoInfmon = 20;
+    int margin = 5;
     float modalLarguraLinha = 4.0f;
     int larguraInterface = 300;
     int alturaInterface = 100;
-    float posX = (float)(posXInfmon + larguraInfmon + 20); //se aliado
+    float posY = posYInfmon;
+    float posX = (float)(posXInfmon + larguraInfmon + gapBotaoInfmon); //se aliado
     if(!isAliado){
         //se inimigo
-        posX = (float)(posXInfmon - 50 - larguraInterface);
+        posX = (float)(posXInfmon - gapBotaoInfmon - larguraInterface);
     }
-    Rectangle vidaINFmon = criaRetangulo(posX, posYInfmon, larguraInterface, alturaInterface, 0, 0, 1);
-    DrawRectangleRec(vidaINFmon, WHITE);
-    DrawRectangleLinesEx(vidaINFmon, modalLarguraLinha, BLACK);
+
+    float posXNomeInfmon = posX + margin;
+    float posYNomeInfmon = posY + margin;
+
+    Rectangle vidaINFmonCointainer = criaRetangulo(posX, posY, larguraInterface, alturaInterface, 0, 0, 1);
+    DrawRectangleRec(vidaINFmonCointainer, WHITE);
+    DrawRectangleLinesEx(vidaINFmonCointainer, modalLarguraLinha, BLACK);
+
+    DrawText(infmon.nome, posXNomeInfmon, posYNomeInfmon, 20, BLACK);\
+
+    criaBarraDeVidaINFmon(posXNomeInfmon, posYNomeInfmon + 20, infmon);
+}
+
+void criaBarraDeVidaINFmon(float posX, float posY, Infmon infmon){
+    float vidaLarguraLinha = 2.0f;
+    int alturaRect = 10;
+    float larguraTotal = 200.0f;
+
+    float larguraVidaAtual = (float)((larguraTotal / infmon.VIDA_MAX)*(infmon.vida));
+
+    Rectangle danoTomado = criaRetangulo(posX, posY, larguraTotal, alturaRect, 0, 0, 1);
+    DrawRectangleRec(danoTomado, RED);
+
+    Rectangle vidaAtual = criaRetangulo(posX, posY, larguraVidaAtual, alturaRect, 0, 0, 1);
+    DrawRectangleRec(vidaAtual, GREEN);
+
+    Rectangle vidaContainer = criaRetangulo(posX, posY, larguraTotal, alturaRect, 0, 0, 1);
+    DrawRectangleLinesEx(vidaContainer, vidaLarguraLinha, BLACK);
+}
+
+//TROCAR LOCAL DE CRIACAO DA FUNCAO
+void calculaDano(int dano, Infmon *infmon){
+    if(infmon->vida - dano <=0){
+        infmon->vida = 0;
+    } else {
+        infmon->vida -= dano;
+    }
 
 }
 
-
-void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha){
+//TROCAR LOCAL DE CRIACAO DA FUNCAO
+void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha, int *indexInimigo){
     int NUM_BOTOES = 4;
 
     int isAcao = FALSE;
     double testeTime = 0;
     int mouseCimaDeBotaoN = 0;
+
+    if(inimigo->vida == 0){
+        if(*indexInimigo-1 >=0){
+            *indexInimigo= *indexInimigo - 1;
+        } else {
+            printf("ADVERSARIO PERDEU");
+        }
+
+    }
 
     for (int i = 0; i < NUM_BOTOES; i++){
         if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
@@ -293,18 +374,21 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon i
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                        calculaDano(aliado.ataques[i].dano, inimigo);
                         testeTime = GetTime() + (double)3;
                     } break;
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                        calculaDano(aliado.ataques[i].dano, inimigo);
 
                     } break;
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
+                        calculaDano(aliado.ataques[i].dano, inimigo);
                     } break;
 
                 case 3:

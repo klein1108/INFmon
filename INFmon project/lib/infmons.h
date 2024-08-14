@@ -16,6 +16,7 @@ typedef struct {
     char nome[100];
     int nivel;
     int vida;
+    int VIDA_MAX;
     int ataque;
     int defesa;
     int xp;

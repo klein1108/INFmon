@@ -15,7 +15,8 @@ Infmon criaPokemonAliadoAgua(){
     aliado.ataque = aliado.nivel * ATAQUE_DEFESA_DEFAULT;
     aliado.defesa = aliado.nivel * ATAQUE_DEFESA_DEFAULT;
     aliado.xp = 0;
-    aliado.vida = (aliado.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    aliado.VIDA_MAX = (aliado.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    aliado.vida = aliado.VIDA_MAX;
 
     aliado.ataques[0] = ataqueBasico;
     aliado.ataques[1] = ataqueMedio;
@@ -52,7 +53,8 @@ Infmon criaPokemonInimigoFogo(){
     inimigo.ataque = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
     inimigo.defesa = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
     inimigo.xp = 0;
-    inimigo.vida = (inimigo.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    inimigo.VIDA_MAX = (inimigo.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    inimigo.vida = inimigo.VIDA_MAX;
 
     inimigo.ataques[0] = ataqueBasico;
     inimigo.ataques[1] = ataqueMedio;
@@ -83,7 +85,8 @@ Infmon criaINFmon(char tipoINFmon){
     inimigo.ataque = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
     inimigo.defesa = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
     inimigo.xp = 0;
-    inimigo.vida = (inimigo.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    inimigo.VIDA_MAX = (inimigo.nivel-1)*20 + 100; //nivel-1*20 + 100;
+    inimigo.vida = inimigo.VIDA_MAX;
 
     inimigo.ataques[0] = ataqueBasico;
     inimigo.ataques[1] = ataqueMedio;
