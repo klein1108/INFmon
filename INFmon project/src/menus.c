@@ -178,52 +178,78 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
     return processoAtual;
 }
 
-int menuBatalha(int *processoInternoAtual){
+int menuBatalha(int *processoInternoAtual, int isBoss){
     int isFecharJanela = FALSE;
 
     int resultadoBatalha = BATALHA_DERROTA;
 
-    int inimigoAtual = 2;
+    int infmonInimigoAtual = MAX_INFMONS;
+    int infmonAliadoAtual = MAX_INFMONS;
 
-    Infmon inimigo1 = criaPokemonInimigoFogo();
-    Infmon inimigo2 = criaPokemonAliadoAgua();
-    Infmon inimigo3 = criaPokemonInimigoFogo();
-    Infmon INFmonsInimigos[3] = {
-        inimigo1, inimigo2, inimigo3
-    };
+//    Infmon bossInfmonUm = criaPokemonInimigoFogo();
+//    Infmon bossInfmonDois = criaPokemonAliadoAgua();
+//    Infmon bossInfmonTres = criaPokemonInimigoFogo();
+//
+//    Infmon INFmonsInimigos[3] = {
+//        bossInfmonUm, bossInfmonDois, bossInfmonTres
+//    };
+    Infmon INFmonsInimigos[3] = {};
+    //CARREGA DADOS DO BOSS
+    printf("AQUI\n");
+    if(isBoss == PROCESSO_INTERNO_BATALHA_BOSS){
+//        //LE ARQUIVO
+//
+        Personagem boss;
+        boss.nInfmons = 2;
+        infmonInimigoAtual = boss.nInfmons - 1;
+        Infmon bossInfmonUm = criaPokemonInimigoFogo();
+        Infmon bossInfmonDois = criaPokemonAliadoAgua();
 
-//    Infmon inimigo = criaPokemonInimigoFogo();
-    Infmon aliado = criaPokemonAliadoAgua();
+//        INFmonsInimigos[0] = bossInfmonUm;
+//        INFmonsInimigos[1] = bossInfmonDois;
+//        INFmonsInimigos[2] = bossInfmonTres;
+        Infmon INFmonsInimigosArquivo[2] = {
+            bossInfmonUm, bossInfmonDois
+        };
+//
+//        //VEIO DO ARQUIVO
+//
+        for(int i = 0; i < 2; i++){
+            INFmonsInimigos[i] = INFmonsInimigosArquivo[i];
+        }
+//
+    } else {
+        infmonInimigoAtual = 0;
+//        //CRIA UM INFMONALEATORIO
+//        Infmon infmonSelvagem = criaPokemonInimigoFogo();
+//        INFmonsInimigos[infmonInimigoAtual] = infmonSelvagem;
+//
+    }
 
-//    float vidaMaxInimigo = (float)inimigo.vida;
-//    float vidaMaxInimigo = (float)INFmonsInimigos[inimigoAtual].vida;
-//    float vidaMaxAliado = (float)aliado.vida;
+
+
+    //CARREGA DADOS DO PERSONAGEM ATUAL
+    Personagem aliado;
+    aliado.nInfmons = 1;
+    infmonAliadoAtual = aliado.nInfmons - 1;
+    Infmon aliadoInfmonUm = criaPokemonAliadoAgua();
+    aliado.infmons[infmonAliadoAtual] = aliadoInfmonUm;
+
 
     float bordaInferiorAltura = 250.0f;
     float modalLarguraLinha = 4.0;
 
     int NUM_BOTOES = 4;
 
-//    float width = 100.0f;
-//        float height = 50.0f;
     float posX = 0.0f;
 
     float posY = (ALTURA - bordaInferiorAltura);
 
-//        float posXButton = ((posX + LARGURA)/NUM_BOTOES);
-//        float posYButton = (posY + (bordaInferiorAltura/2) - 2*(modalLarguraLinha));
-//        float gapX = (float)GAP_ENTRE_BOTOES;
-
-//        int isAcao = FALSE;
-//        double testeTime = 0;
-//        int mouseCimaDeBotaoN = 0;
 
     Rectangle botoes[NUM_BOTOES];
 
-//        int danoTotal = 0;
     int processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
 
-//    printf("ENTROU EM MENU BATALHA()\n Vida inimigo: %d\n", inimigo.vida);
 
     float alturaInfmon = 200.0f;
     float larguraInfmon = alturaInfmon;
@@ -245,35 +271,34 @@ int menuBatalha(int *processoInternoAtual){
         DrawRectangleRec(nossoINFmon, BLUE);
         DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
 
-        criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon, aliado);
+        criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon, aliado.infmons[infmonAliadoAtual]);
 
 
         Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
 
-        Color tipo = retornaCorDoTipo(INFmonsInimigos[inimigoAtual].tipo);
+        Color tipo = retornaCorDoTipo(INFmonsInimigos[infmonInimigoAtual].tipo);
         DrawRectangleRec(delesINFmon, tipo);
         DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
 
-        criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo, INFmonsInimigos[inimigoAtual]);
+        criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo, INFmonsInimigos[infmonInimigoAtual]);
 
 
         switch(processoAtualBatalha){
             case PROCESSO_BATALHA_INICIAL:
-                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha);
+                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha, isBoss);
                 break;
             case PROCESSO_BATALHA_ATAQUES:
-                    criaInterfaceMenuBatalhaAtaques(botoes, aliado, &INFmonsInimigos[inimigoAtual], posX, posY, &processoAtualBatalha, &inimigoAtual);
+                    criaInterfaceMenuBatalhaAtaques(botoes, aliado.infmons[infmonAliadoAtual], &INFmonsInimigos[infmonInimigoAtual], posX, posY, &processoAtualBatalha, &infmonInimigoAtual);
                 break;
 
             case PROCESSO_BATALHA_TENTAR_FUGA:
                     resultadoBatalha = BATALHA_FUGA;
                     *processoInternoAtual = PROCESSO_INTERNO_MAPA;
-                    printf("AQUI\n");
                 break;
         }
 
         EndDrawing();
-    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   }
 
     return resultadoBatalha;
 }
@@ -317,7 +342,7 @@ void criaInterfaceDeVidaINFmon(int isAliado, float posXInfmon, float larguraInfm
     DrawRectangleRec(vidaINFmonCointainer, WHITE);
     DrawRectangleLinesEx(vidaINFmonCointainer, modalLarguraLinha, BLACK);
 
-    DrawText(infmon.nome, posXNomeInfmon, posYNomeInfmon, 20, BLACK);\
+    DrawText(infmon.nome, posXNomeInfmon, posYNomeInfmon, 20, BLACK);
 
     criaBarraDeVidaINFmon(posXNomeInfmon, posYNomeInfmon + 20, infmon);
 }
@@ -340,14 +365,67 @@ void criaBarraDeVidaINFmon(float posX, float posY, Infmon infmon){
 }
 
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
-void calculaDano(int dano, Infmon *infmon){
-    if(infmon->vida - dano <=0){
-        infmon->vida = 0;
+void calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmonAlvo){
+    float danoVantagem = ATAQUE_NORMAL;
+    if(infmonAlvo->vida - ataque.dano <= 0.0f){
+        infmonAlvo->vida = 0.0f;
     } else {
-        infmon->vida -= dano;
+        danoVantagem = verificaSePossuiVantagem(ataque.tipo, infmonAlvo->tipo);
+        float danoTotal = ((float)(ataque.dano + nivelAtaque))*danoVantagem;
+        infmonAlvo->vida -= danoTotal;
+    }
+}
+
+float verificaSePossuiVantagem(char tipoAtacante, char tipoAlvo){
+    float danoMultiplicador = ATAQUE_NORMAL;
+
+    switch(tipoAtacante){
+        case TIPO_AGUA:
+            switch(tipoAlvo){
+                case TIPO_FOGO:
+                    danoMultiplicador = ATAQUE_EFETIVO;
+                    break;
+
+                case TIPO_TERRA:
+                    danoMultiplicador = ATAQUE_INEFETIVO;
+                    break;
+                default:
+                    danoMultiplicador = ATAQUE_NORMAL;
+            }
+            break;
+
+        case TIPO_FOGO:
+            switch(tipoAlvo){
+                case TIPO_TERRA:
+                    danoMultiplicador = ATAQUE_EFETIVO;
+                    break;
+
+                case TIPO_AGUA:
+                    danoMultiplicador = ATAQUE_INEFETIVO;
+                    break;
+                default:
+                    danoMultiplicador = ATAQUE_NORMAL;
+            }
+            break;
+
+        case TIPO_TERRA:
+                    switch(tipoAlvo){
+                case TIPO_AGUA:
+                    danoMultiplicador = ATAQUE_EFETIVO;
+                    break;
+
+                case TIPO_FOGO:
+                    danoMultiplicador = ATAQUE_INEFETIVO;
+                    break;
+                default:
+                    danoMultiplicador = ATAQUE_NORMAL;
+            }
+            break;
     }
 
+    return danoMultiplicador;
 }
+
 
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
 void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha, int *indexInimigo){
@@ -361,7 +439,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
         if(*indexInimigo-1 >=0){
             *indexInimigo= *indexInimigo - 1;
         } else {
-            printf("ADVERSARIO PERDEU");
+            printf("ADVERSARIO PERDEU\n");
         }
 
     }
@@ -374,21 +452,21 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i].dano, inimigo);
+                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
                         testeTime = GetTime() + (double)3;
                     } break;
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i].dano, inimigo);
+                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
 
                     } break;
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i].dano, inimigo);
+                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
                     } break;
 
                 case 3:
@@ -420,7 +498,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
 
 }
 
-void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha){
+void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss){
     static const char *labelBotoesBatalha[] = {
         "Atacar",
         "Captura",
@@ -445,7 +523,12 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("%s\n", labelBotoesBatalha[i]);
+                        if(isBoss){
+                            printf("\nACAO INVALIDA\n");
+                        } else {
+                            printf("%s\n", labelBotoesBatalha[i]);
+                        }
+
                     } break;
 
                 case 2:
@@ -457,11 +540,15 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
 
                 case 3:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("%s\n", labelBotoesBatalha[i]);
-                        //TODO: ADICIONAR VALIDACAO DE FUGA APENAS PARA BATALHA CONTRA INFMONS
-                        //TODO: ADICIONAR CHANCE DE FUGA
-                        //TODO: ADICIONAR MENSAGENS CASO TENTATIVA DE CERTO/ERRADO
-                        *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
+                        if(isBoss){
+                            printf("ACAO INVALIDA\n");
+                        } else {
+                            printf("%s\n", labelBotoesBatalha[i]);
+                            //TODO: ADICIONAR CHANCE DE FUGA
+                            //TODO: ADICIONAR MENSAGENS CASO TENTATIVA DE CERTO/ERRADO
+                            *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
+                        }
+
                     }
                     break;
             }

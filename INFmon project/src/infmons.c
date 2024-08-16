@@ -39,9 +39,14 @@ Infmon criaPokemonInimigoFogo(){
     ataqueMedio.dano = 3;
     ataqueBasico.tipo = TIPO_NORMAL;
 
-    strcpy(ataqueForte.nome, "Xingar");
-    ataqueForte.dano = 5;
-    ataqueBasico.tipo = TIPO_FOGO;
+//    strcpy(ataqueForte.nome, "Xingar");
+//    ataqueForte.dano = 5;
+//    ataqueBasico.tipo = TIPO_FOGO;
+
+    strcpy(ataqueForte.nome, "Gotejar");
+    ataqueForte.dano = 4;
+    ataqueForte .tipo = TIPO_AGUA;
+//    strcpy(ataqueAguaTres.nome, "Gotejar");
 
 
 
@@ -62,6 +67,7 @@ Infmon criaPokemonInimigoFogo(){
 
     return inimigo;
 }
+//REMOVER E COLOCAR OS DADOS DOS INFMONS DOS ARQUIVOS BINARIOS, PROGRAMA JA ESTA SE ATRAPALHANDO POR CONTA DAS VARIAVEIS GLOBAIS
 
 Infmon criaINFmon(char tipoINFmon){
     strcpy(ataqueBasico.nome, "Morder");

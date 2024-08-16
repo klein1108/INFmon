@@ -28,6 +28,10 @@
 #define TIPO_FOGO 'F'
 #define TIPO_TERRA 'T'
 
+#define ATAQUE_NORMAL 1.0F
+#define ATAQUE_EFETIVO 2.0F
+#define ATAQUE_INEFETIVO 0.5F
+
 #define ATAQUE_DEFESA_DEFAULT 2
 
 //-----MAPA-------------------------
@@ -43,6 +47,10 @@
 #define PROCESSO_BATALHA_ATAQUES 1
 #define PROCESSO_BATALHA_TENTAR_FUGA 3
 
+#define BATALHA_INFMON 0
+#define BATALHA_BOSS 1
+
+
 //------MENU------------------------
 #define GAP_ENTRE_BOTOES 110
 
@@ -52,6 +60,7 @@
 #define BOTAO_SAIR 2
 
 #define PROCESSO_INTERNO_MAPA 0
-#define PROCESSO_INTERNO_BATALHA 1
+#define PROCESSO_INTERNO_BATALHA_BOSS 1
+#define PROCESSO_INTERNO_BATALHA_INFMON 2
 
 #endif // contants_h

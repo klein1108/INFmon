@@ -59,10 +59,11 @@ void moveJogador(Personagem *jogador, char mapa[MAX_LINHA][MAX_COLUNA-1], int *p
 
     if(mapa[jogador->posY][jogador->posX] == 'G'){
         //CHANCE DE ENCONTRAR INFMON SELVAGEM
+//        *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
     }
     else if(mapa[jogador->posY][jogador->posX] == 'E'){
         //BATALHA COM INIMIGO
-        *processoInternoAtual = PROCESSO_INTERNO_BATALHA;
+        *processoInternoAtual = PROCESSO_INTERNO_BATALHA_BOSS;
     }
 
 }
@@ -106,6 +107,7 @@ void inicializaMapa(int processoAtual){
 //        }
 
         int resultadoBatalha = NULL;
+        int isBoss = FALSE;
 
         while(!WindowShouldClose() && processoAtual == PROCESSO_INICIA_JOGO){
             BeginDrawing();
@@ -123,8 +125,17 @@ void inicializaMapa(int processoAtual){
                     moveJogador(&jogador, mapa, &processoInternoAtual, 'c');
                     break;
 
-                case PROCESSO_INTERNO_BATALHA:
-                    resultadoBatalha = menuBatalha(&processoInternoAtual);
+                case PROCESSO_INTERNO_BATALHA_BOSS:
+                    resultadoBatalha = menuBatalha(&processoInternoAtual, TRUE);
+                    //Move char para lado para que nao volte em cima do inimigo e fique preso no menu de batalha
+                    jogador.posX = jogador.posX + 2;
+                    //depois que sai da batalha carrega o mapa
+                    processoInternoAtual = PROCESSO_INTERNO_MAPA;
+
+                    break;
+
+                case PROCESSO_INTERNO_BATALHA_INFMON:
+                    resultadoBatalha = menuBatalha(&processoInternoAtual, FALSE);
                     //Move char para lado para que nao volte em cima do inimigo e fique preso no menu de batalha
                     jogador.posX = jogador.posX + 2;
                     //depois que sai da batalha carrega o mapa
