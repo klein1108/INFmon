@@ -30,11 +30,23 @@ typedef struct {
     int posX;
     int posY;
 } Personagem;
+//
+//Personagem jogador;
+
+typedef struct{
+    Personagem jogador;
+    int fase;
+}Save;
 
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
 Infmon criaPokemonInimigoTerra();
-void adicionaINFmon(char escolha);
+void adicionaINFmon(char tipo, int indice);
+Infmon criaINFmonAleatorio(int fase);
 void criaArquivoDeAtaques();
 void leArquivosDeAtaques();
+int salvaJogo(Save jogoAtual);
+int carregaJogo(Save *jogoSalvo);
+
+
 #endif // infmons_h

@@ -1,5 +1,5 @@
 #include "../lib/infmons.h"
-
+extern Personagem jogador;
 static Ataque ataqueBasico;
 static Ataque ataqueMedio;
 static Ataque ataqueForte;
@@ -67,6 +67,55 @@ Infmon criaPokemonInimigoFogo(){
 
     return inimigo;
 }
+
+Infmon criaINFmonAleatorio(int fase){
+    Infmon infmon;
+    int tipo = sorteiaProbabilidade(3);
+
+    switch (tipo) {
+        case 0:
+            infmon.tipo = 'A';
+            strcpy(infmon.nome, "Gotinha");
+            strcpy(ataqueForte.nome, "Gotejar");
+            ataqueForte.dano = 4;
+            ataqueForte.tipo = TIPO_AGUA;
+            break;
+        case 1:
+            infmon.tipo = 'T';
+            strcpy(infmon.nome, "Folhinha");
+            strcpy(ataqueForte.nome, "Florir");
+            ataqueForte.dano = 4;
+            ataqueForte.tipo = TIPO_TERRA;
+            break;
+        case 2:
+            infmon.tipo = 'F';
+            strcpy(infmon.nome, "Chaminha");
+            strcpy(ataqueForte.nome, "Queimar");
+            ataqueForte.dano = 4;
+            ataqueForte.tipo = TIPO_FOGO;
+            break;
+    }
+    strcpy(ataqueBasico.nome, "Morder");
+    ataqueBasico.dano = 2;
+    ataqueBasico.tipo = TIPO_NORMAL;
+
+    strcpy(ataqueMedio.nome, "Chutar");
+    ataqueMedio.dano = 3;
+    ataqueBasico.tipo = TIPO_NORMAL;
+
+    infmon.nivel = fase*(sorteiaProbabilidade(4)+1);
+    infmon.VIDA_MAX = (infmon.nivel-1)*20 + 100;
+    infmon.vida = infmon.VIDA_MAX;
+    infmon.xp = 0;
+    infmon.ataque = infmon.nivel + ATAQUE_DEFESA_DEFAULT;
+    infmon.defesa = infmon.nivel + ATAQUE_DEFESA_DEFAULT;
+    infmon.ataques[0] = ataqueBasico;
+    infmon.ataques[1] = ataqueMedio;
+    infmon.ataques[2] = ataqueForte;
+
+    return infmon;
+}
+
 //REMOVER E COLOCAR OS DADOS DOS INFMONS DOS ARQUIVOS BINARIOS, PROGRAMA JA ESTA SE ATRAPALHANDO POR CONTA DAS VARIAVEIS GLOBAIS
 
 Infmon criaINFmon(char tipoINFmon){
@@ -203,44 +252,87 @@ void criaArquivoDeAtaques(){
 }
 
 
-void adicionaINFmon(char escolha){
+void adicionaINFmon(char tipo, int indice){
     FILE *arq;
     Infmon infmon[MAX_INFMONS];
     Infmon leuBIN;
 
-    switch(escolha){
+    switch(tipo){
         case TIPO_AGUA:
-            infmon[0] = criaINFmon(TIPO_AGUA);
+            infmon[indice] = criaINFmon(TIPO_AGUA);
+            jogador.infmons[indice] = criaINFmon(TIPO_AGUA);
             break;
         case TIPO_FOGO:
-            infmon[0] = criaINFmon(TIPO_FOGO);
+            infmon[indice] = criaINFmon(TIPO_FOGO);
+            jogador.infmons[indice] = criaINFmon(TIPO_FOGO);
             break;
 
         case TIPO_TERRA:
-            infmon[0] = criaINFmon(TIPO_TERRA);
+            infmon[indice] = criaINFmon(TIPO_TERRA);
+            jogador.infmons[indice] = criaINFmon(TIPO_TERRA);
             break;
     }
 
-    arq = fopen("userINFmon.bin", "wb+");
-
-    if(arq == NULL){
-        printf("\nERRO AO ABRIR ARQUIVO\n");
-    } else {
-        if(!(fwrite(infmon, sizeof(Infmon), 1, arq))){
-            printf("\nERRO AO CRIAR ARQUIVO\n");
-        }
-        rewind(arq);
-        if(fread(&leuBIN, sizeof(Infmon),1 ,arq) != 1){
-             printf("\nERRO AO LER ARQUIVO\n");
-        } else {
-            printf("NOME INFMON: %s\n", leuBIN.nome);
-        }
-
-    }
-
-    fclose(arq);
+//    arq = fopen("userINFmon.bin", "wb+");
+//
+//    if(arq == NULL){
+//        printf("\nERRO AO ABRIR ARQUIVO\n");
+//    } else {
+//        if(!(fwrite(infmon, sizeof(Infmon), 1, arq))){
+//            printf("\nERRO AO CRIAR ARQUIVO\n");
+//        }
+//        rewind(arq);
+//        if(fread(&leuBIN, sizeof(Infmon),1 ,arq) != 1){
+//             printf("\nERRO AO LER ARQUIVO\n");
+//        } else {
+//            printf("NOME INFMON: %s\n", leuBIN.nome);
+//        }
+//
+//    }
+//
+//    fclose(arq);
 
 }
 
+int salvaJogo(Save jogoAtual){
+    int salvou = 0;
+    FILE *arqBin;
 
+    arqBin = fopen("save.bin", "wb");
+    if(arqBin == NULL){
+        salvou = 0;
+    }
+    else{
+        fwrite(&jogoAtual, sizeof(Save), 1, arqBin);
+        if(ferror(arqBin)){
+            salvou = 0;
+        }
+        else{
+            salvou = 1;
+        }
+        fclose(arqBin);
+    }
+    return salvou;
+}
+
+int carregaJogo(Save *jogoSalvo){
+    int carregou = 0;
+    FILE *arqBin;
+
+    arqBin = fopen("save.bin", "rb");
+    if(arqBin == NULL){
+        carregou = 0;
+    }
+    else{
+        fread(jogoSalvo, sizeof(Save), 1, arqBin);
+        if(ferror(arqBin)){
+            carregou = 0;
+        }
+        else{
+            carregou = 1;
+        }
+        fclose(arqBin);
+    }
+    return carregou;
+}
 

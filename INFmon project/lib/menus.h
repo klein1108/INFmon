@@ -8,11 +8,14 @@
 #include "infmons.h"
 
 int menuInicial(int processoInternoAtual);
-int menuEscolheInfmon(int processoAtual, int *escolhido);
+int menuEscolheInfmon(int processoAtual);
 int menuBatalha(int *processoInternoAtual, int isBoss);
 void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss);
 void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha, int *indexInimigo);
+int menuPause(int processoAtual);
+int menuFimDeJogo(int processoAtual, int situacao);
 
+//TROCAR DE LUGAR
 float verificaSePossuiVantagem(char tipoAtacante, char tipoAlvo);
 void calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmon);
 Color retornaCorDoTipo(char tipo);

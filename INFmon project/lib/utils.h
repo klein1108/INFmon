@@ -1,4 +1,6 @@
 #include "raylib.h"
+#include<time.h>
+#include<stdlib.h>
 
 Color defineCorDoBotao (int indexBotao, int mouseHoverRec);
 int abreModalDeConfirmacaoMenuInicial(char texto[], int tamanhoFonte, float margin, int alturaModal, int larguraModal, int larguraTela, int alturaTela, int* isAbertaModal);

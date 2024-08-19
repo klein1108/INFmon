@@ -93,7 +93,107 @@ int menuInicial(int processoAtual){
     return processoAtual;
 }
 
-int menuEscolheInfmon(int processoAtual, int *escolhido){
+//------------------------------------------------------------------------------------
+
+int menuPause(int processoAtual){
+    int NUM_BOTOES = 5;
+    Color corBotoes[5] = {GREEN, BLUE, BLUE, GREEN, RED};
+    Rectangle botoes[NUM_BOTOES];
+
+    static const char *labelBotoes[] = {
+        "CONTINUAR",
+        "CARREGAR JOGO",
+        "SALVAR JOGO",
+        "VOLTAR AO MENU",
+        "SAIR"
+    };
+
+    int posMeioX = LARGURA/2;
+    int mouseCimaDeBotaoN = -1;
+
+    processoAtual = PROCESSO_PAUSE;
+
+    while (!WindowShouldClose() && processoAtual == PROCESSO_PAUSE) {
+
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawText("PAUSE", posMeioX-(5*25), 20, 70, BLACK);
+
+        for(int i=0; i<NUM_BOTOES; i++){
+            //condicionais que permitem navegar o menu por teclas
+            if(IsKeyPressed(KEY_C)){
+                processoAtual = PROCESSO_INICIA_JOGO;
+            }
+            else if(IsKeyPressed(KEY_L)){
+                processoAtual = PROCESSO_CARREGAR_JOGO;
+            }
+            else if(IsKeyPressed(KEY_S)){
+                processoAtual = PROCESSO_SALVAR_JOGO;
+            }
+            else if(IsKeyPressed(KEY_B)){
+                processoAtual = PROCESSO_MENU_INICIAL;
+            }
+            else if(IsKeyPressed(KEY_Q)){
+                processoAtual = PROCESSO_FECHA_JANELA;
+            }
+            //condicionais que permitem navegar o menu pelo clique do mouse
+            if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
+                mouseCimaDeBotaoN = i;
+
+                switch(mouseCimaDeBotaoN){
+                    case 0:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_INICIA_JOGO;
+                        } break;
+
+                    case 1:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_CARREGAR_JOGO;
+                        } break;
+
+                    case 2:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_SALVAR_JOGO;
+                        } break;
+                    case 3:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_MENU_INICIAL;
+                        } break;
+                    case 4:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_FECHA_JANELA;
+                        } break;
+
+                }
+
+            }
+            if(i<2){
+                botoes[i] = criaBotao(600.0f/4.0f, 150.0f, 400.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES+5, i, 5.0f, WHITE, corBotoes[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
+                DrawText(labelBotoes[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(labelBotoes[i], 25)/2), (int) botoes[i].y + botoes[i].height/2 - 30/2  , 30, BLACK);
+            }
+            else if (i<4){
+                botoes[i] = criaBotao(600.0f, 150.0f, 400.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES+5, (i-2), 5.0f, WHITE, corBotoes[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
+                DrawText(labelBotoes[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(labelBotoes[i], 25)/2), (int) botoes[i].y + botoes[i].height/2 - 30/2  , 30, BLACK);
+            }
+            else{
+                botoes[i] = criaBotao(600.0f/1.6f, 150.0f, 400.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES+5, (i-2), 5.0f, WHITE, corBotoes[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
+                DrawText(labelBotoes[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(labelBotoes[i], 25)/2), (int) botoes[i].y + botoes[i].height/2 - 30/2  , 30, BLACK);
+            }
+
+        }
+
+        EndDrawing();
+    }
+
+
+
+    return processoAtual;
+}
+
+//------------------------------------------------------------------------------------
+
+int menuEscolheInfmon(int processoAtual){
 
     int NUM_INFMONS = 3;
 
@@ -101,19 +201,17 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
     Rectangle infmons[3];
 
     static const char *nomeInfmons[] = {
-        "Nome 1",
-        "Nome 2",
-        "Nome 3"
+        "Folhinha", //grama
+        "Gotinha", //agua
+        "Chaminha"  //fogo
     };
 
     int mouseCimaDeBotaoN = -1;
 
-    static const char texto[40] = "Escolha seu INFmon inicial";
+    static const char texto[] = "Escolha seu INFmon inicial";
     int textoLength = strlen(texto);
 
-    //TESTE
-    char escolhidoTeste = ' ';
-
+    char escolhido = ' ';
 
     processoAtual = PROCESSO_ESCOLHER_INFMON;
 
@@ -126,46 +224,54 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
 
         for (int i = 0; i < NUM_INFMONS; i++){
 
-                if(CheckCollisionPointRec(GetMousePosition(), infmons[i])){
-                    mouseCimaDeBotaoN = i;
+            if(IsKeyPressed(KEY_T)){
+                escolhido = 'T';
+                //processoAtual = proxima etapa
+            }
+            else if(IsKeyPressed(KEY_A)){
+                escolhido = 'A';
+                //processoAtual = proxima etapa
+            }
+            else if(IsKeyPressed(KEY_F)){
+                escolhido = 'F';
+                //processoAtual = proxima etapa
+            }
 
-                    switch(mouseCimaDeBotaoN){
-                        case 0:
-                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+            if(CheckCollisionPointRec(GetMousePosition(), infmons[i])){
+                mouseCimaDeBotaoN = i;
 
-                                *escolhido = 1;
-                                escolhidoTeste = 'F';
+                switch(mouseCimaDeBotaoN){
+                    case 0:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            escolhido = 'T';
+                            //processoAtual = proxima etapa
+                        } break;
+
+                    case 1:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            escolhido = 'A';
                                 //processoAtual = proxima etapa
-                            } break;
+                        } break;
 
-                        case 1:
-                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                *escolhido = 2;
-                                escolhidoTeste = 'A';
+                    case 2:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            escolhido = 'F';
                                 //processoAtual = proxima etapa
-                            } break;
-
-                        case 2:
-                            if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                                *escolhido = 3;
-                                escolhidoTeste = 'T';
-                                //processoAtual = proxima etapa
-                            } break;
+                        } break;
 
                     }
 
                 }
 
-                if(escolhidoTeste != ' '){
-                    adicionaINFmon(escolhidoTeste);
+                if(escolhido != ' '){
+                    adicionaINFmon(escolhido, 0);
 //                    criaArquivoDeAtaques();
-                    leArquivosDeAtaques();
+//                    leArquivosDeAtaques();
+
                     processoAtual = PROCESSO_INICIA_JOGO;
                 }
 
-                printf("ESCOLHIDO: %d", *escolhido);
 
-                //AJUSTE!!!
                 infmons[i] = criaBotao(LARGURA/2 -150, 150.0f, 100.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES, i, 5.0f, WHITE, corInfmons[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
                 DrawText(nomeInfmons[i], LARGURA/2+50, (int) infmons[i].y + infmons[i].height/2 - 30/2  , 30, BLACK);
 
@@ -177,6 +283,82 @@ int menuEscolheInfmon(int processoAtual, int *escolhido){
 
     return processoAtual;
 }
+
+//------------------------------------------------------------------------------------
+int menuFimDeJogo(int processoAtual, int situacao){
+    static const char titulo[] ={"Fim de Jogo"};
+    static const char *mensagem[] ={
+        "INFelizmente voce foi derrotado :(",
+        "Parebens voce venceu!"
+    };
+    static const char *labelBotoes[] = {
+        "VOLTAR AO MENU",
+        "CARREGAR JOGO",
+        "SAIR"
+    };
+    int NUM_BOTOES = 3;
+    Rectangle botoes[NUM_BOTOES];
+    Color corBotoes[3] = {GREEN, BLUE, RED};
+    int titulo_length = strlen(titulo);
+    int mensagem_length = strlen(mensagem[situacao]);
+    int mouseCimaDeBotaoN = -1;
+
+    processoAtual = PROCESSO_MENU_FINAL;
+
+    while (!WindowShouldClose() && processoAtual == PROCESSO_MENU_FINAL) {
+        BeginDrawing();
+        ClearBackground(WHITE);
+
+        DrawText(titulo, LARGURA/2 - (titulo_length/2)*30, 40, 60, BLACK);
+        DrawText(mensagem[situacao], LARGURA/2 - (mensagem_length/2)*22, 120, 45, BLACK);
+
+        for (int i = 0; i < NUM_BOTOES; i++){
+
+
+            if(IsKeyPressed(KEY_B))
+                processoAtual = PROCESSO_MENU_INICIAL;
+            if(IsKeyPressed(KEY_C))
+                processoAtual = PROCESSO_CARREGAR_JOGO;
+            if(IsKeyPressed(KEY_Q)){
+                processoAtual = PROCESSO_FECHA_JANELA;
+            }
+
+            if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
+                mouseCimaDeBotaoN = i;
+
+                switch(mouseCimaDeBotaoN){
+                    case 0:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_MENU_INICIAL;
+                        } break;
+
+                    case 1:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_CARREGAR_JOGO;
+                        } break;
+
+                    case 2:
+                        if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                            processoAtual = PROCESSO_FECHA_JANELA;
+                        } break;
+
+                }
+
+            }
+
+            botoes[i] = criaBotao(LARGURA/2 - 200, 200, 400, 80, 0, (float)GAP_ENTRE_BOTOES, i, 5.0f, WHITE, corBotoes[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
+            DrawText(labelBotoes[i], (int)( botoes[i].x + botoes[i].width/2 - MeasureText(labelBotoes[i], 25)/2), (int) botoes[i].y + botoes[i].height/2 - 30/2  , 30, BLACK);
+        }
+
+        EndDrawing();
+    }
+
+    return processoAtual;
+}
+//------------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------------
 
 int menuBatalha(int *processoInternoAtual, int isBoss){
     int isFecharJanela = FALSE;
@@ -219,8 +401,8 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
         }
 //
     } else {
+        INFmonsInimigos[0] = criaINFmonAleatorio(1/*fase*/);
         infmonInimigoAtual = 0;
-//        //CRIA UM INFMONALEATORIO
 //        Infmon infmonSelvagem = criaPokemonInimigoFogo();
 //        INFmonsInimigos[infmonInimigoAtual] = infmonSelvagem;
 //
@@ -258,7 +440,7 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
     float posYInimigo = 0;
     float posXInimigo = LARGURA - larguraInfmon - (modalLarguraLinha);
 
-    while (!WindowShouldClose() && !isFecharJanela && *processoInternoAtual == PROCESSO_INTERNO_BATALHA){
+    while (!WindowShouldClose() && !isFecharJanela && (*processoInternoAtual == PROCESSO_INTERNO_BATALHA_BOSS || *processoInternoAtual == PROCESSO_INTERNO_BATALHA_INFMON)){
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -302,6 +484,9 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
 
     return resultadoBatalha;
 }
+
+//------------------------------------------------------------------------------------
+
 
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
 Color retornaCorDoTipo(char tipo){

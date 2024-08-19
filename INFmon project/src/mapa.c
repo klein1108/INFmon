@@ -1,6 +1,7 @@
 #include "../lib/mapa.h"
+extern Personagem jogador;
 
-void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Personagem *jogador){
+void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez){
     Color corPosMapa = WHITE;
 
     for(int i = 0; i < MAX_LINHA; i++){
@@ -17,8 +18,8 @@ void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Persona
                 break;
                 case 'J':
                     if(*isPrimeiraVez == 1){
-                        jogador->posX = j;
-                        jogador->posY = i;
+                        jogador.posX = j;
+                        jogador.posY = i;
                         *isPrimeiraVez = 0;
                     }
                     corPosMapa = WHITE;
@@ -32,51 +33,63 @@ void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Persona
     }
 }
 
-void moveJogador(Personagem *jogador, char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual, char moveJogador){
+void moveJogador(char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual){
 
-    if(IsKeyPressed(KEY_UP)){
-        if(mapa[(jogador->posY)-1][jogador->posX] != 'W'){
-            (jogador->posY)--;
+    if(IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)){
+        if(mapa[(jogador.posY)-1][jogador.posX] != 'W'){
+            if(mapa[(jogador.posY)-1][jogador.posX] == 'G'){
+                if(!sorteiaProbabilidade(5)){
+                    *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
+                }
+            }
+            (jogador.posY)--;
         }
     }
-    else if(IsKeyPressed(KEY_DOWN)){
-        if(mapa[(jogador->posY)+1][jogador->posX] != 'W'){
-            (jogador->posY)++;
+    else if(IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)){
+        if(mapa[(jogador.posY)+1][jogador.posX] != 'W'){
+            if(mapa[(jogador.posY)+1][jogador.posX] == 'G'){
+                if(!sorteiaProbabilidade(5)){
+                    *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
+                }
+            }
+            (jogador.posY)++;
         }
     }
-    else if(IsKeyPressed(KEY_LEFT)){
-        if(mapa[jogador->posY][(jogador->posX)-1] != 'W'){
-            (jogador->posX)--;
+    else if(IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A)){
+        if(mapa[jogador.posY][(jogador.posX)-1] != 'W'){
+            if(mapa[jogador.posY][(jogador.posX)-1] == 'G'){
+                if(!sorteiaProbabilidade(5)){
+                    *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
+                }
+            }
+            (jogador.posX)--;
         }
     }
-    else if(IsKeyPressed(KEY_RIGHT)){
-        if(mapa[jogador->posY][(jogador->posX)+1] != 'W'){
-            (jogador->posX)++;
+    else if(IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D)){
+        if(mapa[jogador.posY][(jogador.posX)+1] != 'W'){
+            if(mapa[jogador.posY][(jogador.posX)+1] == 'G'){
+                if(!sorteiaProbabilidade(5)){
+                    *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
+                }
+            }
+            (jogador.posX)++;
         }
     }
 
-    DrawRectangle(jogador->posX*20, jogador->posY*20, 20, 20, BLUE);
+    DrawRectangle(jogador.posX*20, jogador.posY*20, 20, 20, BLUE);
 
-    if(mapa[jogador->posY][jogador->posX] == 'G'){
-        //CHANCE DE ENCONTRAR INFMON SELVAGEM
-//        *processoInternoAtual = PROCESSO_INTERNO_BATALHA_INFMON;
-    }
-    else if(mapa[jogador->posY][jogador->posX] == 'E'){
+    if(mapa[jogador.posY][jogador.posX] == 'E'){
         //BATALHA COM INIMIGO
         *processoInternoAtual = PROCESSO_INTERNO_BATALHA_BOSS;
     }
 
 }
 
-void inicializaMapa(int processoAtual){
-    Personagem jogador;
-    Personagem inimigo;
-
+int inicializaMapa(int processoAtual, int isPrimeiraVez){
     int processoInternoAtual = PROCESSO_INTERNO_MAPA;
 
     char mapa[MAX_LINHA][MAX_COLUNA];
     char dadoColetado;
-    int isPrimeiraVez = 1;
     int i, j;
 
     FILE *arqMapa = NULL;
@@ -98,6 +111,7 @@ void inicializaMapa(int processoAtual){
                 }
             }
         }
+
         fclose(arqMapa);
 
 //        for(int i = 0; i < MAX_LINHA; i++){
@@ -113,6 +127,10 @@ void inicializaMapa(int processoAtual){
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
+            if(IsKeyPressed(KEY_TAB)){
+                processoAtual = menuPause(processoAtual);
+            }
+
             switch(processoInternoAtual){
                 case PROCESSO_INTERNO_MAPA:
 
@@ -120,9 +138,8 @@ void inicializaMapa(int processoAtual){
                         jogador.posX = jogador.posX + 2;
                         resultadoBatalha = NULL;
                     }
-
-                    desenhaMapa(mapa, &isPrimeiraVez, &jogador);
-                    moveJogador(&jogador, mapa, &processoInternoAtual, 'c');
+                    desenhaMapa(mapa, &isPrimeiraVez);
+                    moveJogador(mapa, &processoInternoAtual);
                     break;
 
                 case PROCESSO_INTERNO_BATALHA_BOSS:
@@ -131,22 +148,18 @@ void inicializaMapa(int processoAtual){
                     jogador.posX = jogador.posX + 2;
                     //depois que sai da batalha carrega o mapa
                     processoInternoAtual = PROCESSO_INTERNO_MAPA;
-
                     break;
 
                 case PROCESSO_INTERNO_BATALHA_INFMON:
                     resultadoBatalha = menuBatalha(&processoInternoAtual, FALSE);
-                    //Move char para lado para que nao volte em cima do inimigo e fique preso no menu de batalha
-                    jogador.posX = jogador.posX + 2;
+                    jogador.posX = jogador.posX - 2;
                     //depois que sai da batalha carrega o mapa
                     processoInternoAtual = PROCESSO_INTERNO_MAPA;
-
                     break;
-
             }
-
 
             EndDrawing();
         }
     }
+    return processoAtual;
 }

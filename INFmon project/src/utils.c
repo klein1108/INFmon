@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "../lib/utils.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -166,10 +167,14 @@ void criaInterface(Rectangle *botao, char texto[], int index){
 
         break;
     }
+}
 
+int sorteiaProbabilidade(int numPossibilidades){
+    int sorteado;
 
+    srand(time(NULL));
 
+    sorteado = rand() % (numPossibilidades);
 
-
-
+    return sorteado;
 }

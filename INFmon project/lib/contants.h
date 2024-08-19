@@ -1,6 +1,3 @@
-#ifndef contants_h
-#define contants_h
-
 //-----DEFAULT--------------------
 #define LARGURA 1200
 #define ALTURA 600
@@ -14,7 +11,10 @@
 #define PROCESSO_CARREGAR_JOGO 2
 #define PROCESSO_ESCOLHER_INFMON 3
 #define PROCESSO_INICIA_JOGO 4
-
+#define PROCESSO_PAUSE 5
+#define PROCESSO_FECHA_JANELA 6
+#define PROCESSO_SALVAR_JOGO 7
+#define PROCESSO_MENU_FINAL 8
 
 #define PROCESSO_INTERNO_MAPA 0
 #define PROCESSO_INTERNO_BATALHA 1
@@ -22,6 +22,7 @@
 //-----INFMON-----------------------
 #define N_ATAQUES 3
 #define MAX_INFMONS 5
+#define TAM_NOME 30
 
 #define TIPO_NORMAL 'N'
 #define TIPO_AGUA 'A'
@@ -50,7 +51,6 @@
 #define BATALHA_INFMON 0
 #define BATALHA_BOSS 1
 
-
 //------MENU------------------------
 #define GAP_ENTRE_BOTOES 110
 
@@ -62,5 +62,3 @@
 #define PROCESSO_INTERNO_MAPA 0
 #define PROCESSO_INTERNO_BATALHA_BOSS 1
 #define PROCESSO_INTERNO_BATALHA_INFMON 2
-
-#endif // contants_h
