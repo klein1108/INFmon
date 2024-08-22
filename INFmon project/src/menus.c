@@ -264,7 +264,7 @@ int menuEscolheInfmon(int processoAtual){
                 }
 
                 if(escolhido != ' '){
-                    adicionaINFmon(escolhido, 0);
+                    adicionaINFmon(escolhido, 0, TRUE);
 //                    criaArquivoDeAtaques();
 //                    leArquivosDeAtaques();
 
@@ -368,35 +368,27 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
     int infmonInimigoAtual = MAX_INFMONS;
     int infmonAliadoAtual = MAX_INFMONS;
 
-//    Infmon bossInfmonUm = criaPokemonInimigoFogo();
-//    Infmon bossInfmonDois = criaPokemonAliadoAgua();
-//    Infmon bossInfmonTres = criaPokemonInimigoFogo();
-//
-//    Infmon INFmonsInimigos[3] = {
-//        bossInfmonUm, bossInfmonDois, bossInfmonTres
-//    };
+
     Infmon INFmonsInimigos[3] = {};
-    //CARREGA DADOS DO BOSS
-    printf("AQUI\n");
+
     if(isBoss == PROCESSO_INTERNO_BATALHA_BOSS){
-//        //LE ARQUIVO
-//
         Personagem boss;
-        boss.nInfmons = 2;
+        boss.nInfmons = 3;
         infmonInimigoAtual = boss.nInfmons - 1;
-        Infmon bossInfmonUm = criaPokemonInimigoFogo();
-        Infmon bossInfmonDois = criaPokemonAliadoAgua();
+        Infmon bossInfmonUm = criaPokemonAliadoAgua();
+        Infmon bossInfmonDois = criaPokemonInimigoFogo();
+        Infmon bossInfmonTres = criaPokemonInimigoFogo();
 
 //        INFmonsInimigos[0] = bossInfmonUm;
 //        INFmonsInimigos[1] = bossInfmonDois;
 //        INFmonsInimigos[2] = bossInfmonTres;
-        Infmon INFmonsInimigosArquivo[2] = {
-            bossInfmonUm, bossInfmonDois
+        Infmon INFmonsInimigosArquivo[3] = {
+            bossInfmonUm, bossInfmonDois, bossInfmonTres
         };
 //
 //        //VEIO DO ARQUIVO
 //
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < 3; i++){
             INFmonsInimigos[i] = INFmonsInimigosArquivo[i];
         }
 //
@@ -412,10 +404,13 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
 
     //CARREGA DADOS DO PERSONAGEM ATUAL
     Personagem aliado;
-    aliado.nInfmons = 1;
+    aliado.nInfmons = 2;
     infmonAliadoAtual = aliado.nInfmons - 1;
+    //pega infmons do arquivo
     Infmon aliadoInfmonUm = criaPokemonAliadoAgua();
-    aliado.infmons[infmonAliadoAtual] = aliadoInfmonUm;
+    Infmon aliadoInfmonDois = criaPokemonInimigoFogo();
+    aliado.infmons[0] = aliadoInfmonUm;
+    aliado.infmons[1] = aliadoInfmonDois;
 
 
     float bordaInferiorAltura = 250.0f;
@@ -449,8 +444,9 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
         DrawRectangleLinesEx(retanguloBordaInferior, modalLarguraLinha, BLACK);
 
 
+        Color tipoInfmonAliado = retornaCorDoTipo(aliado.infmons[infmonAliadoAtual].tipo);
         Rectangle nossoINFmon = criaRetangulo(posXInfmon, posYInfmon, larguraInfmon, alturaInfmon, 0, 0, 1);
-        DrawRectangleRec(nossoINFmon, BLUE);
+        DrawRectangleRec(nossoINFmon, tipoInfmonAliado);
         DrawRectangleLinesEx(nossoINFmon, modalLarguraLinha, BLACK);
 
         criaInterfaceDeVidaINFmon(TRUE, posXInfmon, larguraInfmon, posYInfmon, aliado.infmons[infmonAliadoAtual]);
@@ -458,8 +454,8 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
 
         Rectangle delesINFmon = criaRetangulo(posXInimigo, posYInimigo, larguraInfmon, alturaInfmon, 0, 0, 1);
 
-        Color tipo = retornaCorDoTipo(INFmonsInimigos[infmonInimigoAtual].tipo);
-        DrawRectangleRec(delesINFmon, tipo);
+        Color tipoInfmonInimigo = retornaCorDoTipo(INFmonsInimigos[infmonInimigoAtual].tipo);
+        DrawRectangleRec(delesINFmon, tipoInfmonInimigo);
         DrawRectangleLinesEx(delesINFmon, modalLarguraLinha, BLACK);
 
         criaInterfaceDeVidaINFmon(FALSE, posXInimigo, larguraInfmon, posYInimigo, INFmonsInimigos[infmonInimigoAtual]);
@@ -477,12 +473,39 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
                     resultadoBatalha = BATALHA_FUGA;
                     *processoInternoAtual = PROCESSO_INTERNO_MAPA;
                 break;
+
+            case PROCESSO_BATALHA_TURNO_INIMIGO:
+                    if(ataqueInimigo(&aliado.infmons[infmonAliadoAtual], INFmonsInimigos[infmonInimigoAtual], &infmonAliadoAtual)){
+                        processoAtualBatalha = PROCESSO_BATALHA_PERDEU;
+                    } else {
+                        processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+                    }
+
+                break;
+
+            case PROCESSO_BATALHA_VENCEU:
+                resultadoBatalha = BATALHA_VITORIA;
+                *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+                break;
+
+            case PROCESSO_BATALHA_PERDEU:
+                resultadoBatalha = BATALHA_DERROTA;
+                *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+                break;
         }
 
         EndDrawing();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
 
     return resultadoBatalha;
+}
+
+int ataqueInimigo(Infmon *aliado, Infmon inimigo, int *indexAliado){
+    int ataque = sorteiaProbabilidade(3);
+    int isVenceuBatalha = FALSE;
+//    printf("INFMON INIMIGO ATACOU COM %s", inimigo.ataques[ataque].nome);
+    isVenceuBatalha = calculaDano(inimigo.ataques[ataque], inimigo.ataque,aliado, indexAliado);
+    return isVenceuBatalha;
 }
 
 //------------------------------------------------------------------------------------
@@ -550,15 +573,25 @@ void criaBarraDeVidaINFmon(float posX, float posY, Infmon infmon){
 }
 
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
-void calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmonAlvo){
+int calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmonAlvo, int *indexAlvo){
+    int isVenceuBatalha = FALSE;
     float danoVantagem = ATAQUE_NORMAL;
     if(infmonAlvo->vida - ataque.dano <= 0.0f){
         infmonAlvo->vida = 0.0f;
+        if(*indexAlvo -1 >=0){
+            printf("Infmon %s foi substituido\n", infmonAlvo->nome);
+            printf("\n\nINDEX: %d", *indexAlvo);
+            *indexAlvo -= 1;
+        } else {
+            isVenceuBatalha = TRUE;
+            printf("ALVO PERDEU\n");
+        }
     } else {
         danoVantagem = verificaSePossuiVantagem(ataque.tipo, infmonAlvo->tipo);
         float danoTotal = ((float)(ataque.dano + nivelAtaque))*danoVantagem;
         infmonAlvo->vida -= danoTotal;
     }
+    return isVenceuBatalha;
 }
 
 float verificaSePossuiVantagem(char tipoAtacante, char tipoAlvo){
@@ -620,15 +653,6 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
     double testeTime = 0;
     int mouseCimaDeBotaoN = 0;
 
-    if(inimigo->vida == 0){
-        if(*indexInimigo-1 >=0){
-            *indexInimigo= *indexInimigo - 1;
-        } else {
-            printf("ADVERSARIO PERDEU\n");
-        }
-
-    }
-
     for (int i = 0; i < NUM_BOTOES; i++){
         if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
             mouseCimaDeBotaoN = i;
@@ -637,21 +661,34 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
-                        testeTime = GetTime() + (double)3;
+                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                            *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
+                        } else {
+                            testeTime = GetTime() + (double)3;
+
+                            *processoAtualBatalha = PROCESSO_BATALHA_TURNO_INIMIGO;
+                        }
                     } break;
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
+                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                            *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
+                        } else {
+                            *processoAtualBatalha = PROCESSO_BATALHA_TURNO_INIMIGO;
+                        }
 
                     } break;
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        calculaDano(aliado.ataques[i], aliado.ataque, inimigo);
+                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                            *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
+                        } else {
+                            *processoAtualBatalha = PROCESSO_BATALHA_TURNO_INIMIGO;
+                        }
                     } break;
 
                 case 3:
@@ -675,7 +712,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
             if(i == NUM_BOTOES - 1){
                 criaInterface(&botoes[i], NULL, i);
             } else {
-                criaInterface(&botoes[i], aliado.ataques[i].nome, i);
+                criaInterface(&botoes[i], aliado.ataques[i].nome , i);
             }
 
         }

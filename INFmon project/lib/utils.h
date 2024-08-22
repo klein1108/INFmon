@@ -9,3 +9,4 @@ Rectangle criaBotaoDeModal(float posInicialX, float posInicialY, float posFinalX
 Rectangle abreModal(float posX, float posY, float width, float height, float sceenWidth, float screenHeight, float larguraLinha);
 void criaInterface(Rectangle *botao, char texto[], int index);
 Rectangle criaBotao(float posX, float posY, float width, float height, float gapX, float gapY, float nBotao, float larguraBorda, Color corPadrao, Color corSecundaria, int isEmCima);
+int sorteiaProbabilidade(int numPossibilidades);

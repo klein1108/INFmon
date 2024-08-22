@@ -17,7 +17,8 @@ int menuFimDeJogo(int processoAtual, int situacao);
 
 //TROCAR DE LUGAR
 float verificaSePossuiVantagem(char tipoAtacante, char tipoAlvo);
-void calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmon);
+int ataqueInimigo(Infmon *aliado, Infmon inimigo, int *indexInimigo);
+int calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmonAlvo, int *indexAlvo);
 Color retornaCorDoTipo(char tipo);
 void criaInterfaceDeVidaINFmon(int isAliado, float posXInfmon, float larguraInfmon, float posYInfmon, Infmon infmon);
 void criaBarraDeVidaINFmon(float posX, float posY, Infmon infmon);

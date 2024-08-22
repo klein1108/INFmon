@@ -2,13 +2,17 @@
 extern Personagem jogador;
 static Ataque ataqueBasico;
 static Ataque ataqueMedio;
-static Ataque ataqueForte;
 
 //REMOVE
 Infmon criaPokemonAliadoAgua(){
+    Ataque ataqueForte;
     Infmon aliado;
 
     strcpy(aliado.nome, "Printf bonzinho");
+
+    strcpy(ataqueForte.nome, "Molhar");
+    ataqueForte.dano = 4;
+    ataqueForte .tipo = TIPO_AGUA;
 
     aliado.tipo = TIPO_AGUA;
     aliado.nivel = 3;
@@ -31,6 +35,7 @@ Infmon criaPokemonAliadoAgua(){
 
 //REMOVE
 Infmon criaPokemonInimigoFogo(){
+    Ataque ataqueForte;
     strcpy(ataqueBasico.nome, "Morder");
     ataqueBasico.dano = 2;
     ataqueBasico.tipo = TIPO_NORMAL;
@@ -43,9 +48,9 @@ Infmon criaPokemonInimigoFogo(){
 //    ataqueForte.dano = 5;
 //    ataqueBasico.tipo = TIPO_FOGO;
 
-    strcpy(ataqueForte.nome, "Gotejar");
+    strcpy(ataqueForte.nome, "Foguetar");
     ataqueForte.dano = 4;
-    ataqueForte .tipo = TIPO_AGUA;
+    ataqueForte .tipo = TIPO_FOGO;
 //    strcpy(ataqueAguaTres.nome, "Gotejar");
 
 
@@ -69,6 +74,7 @@ Infmon criaPokemonInimigoFogo(){
 }
 
 Infmon criaINFmonAleatorio(int fase){
+    Ataque ataqueForte;
     Infmon infmon;
     int tipo = sorteiaProbabilidade(3);
 
@@ -119,6 +125,7 @@ Infmon criaINFmonAleatorio(int fase){
 //REMOVER E COLOCAR OS DADOS DOS INFMONS DOS ARQUIVOS BINARIOS, PROGRAMA JA ESTA SE ATRAPALHANDO POR CONTA DAS VARIAVEIS GLOBAIS
 
 Infmon criaINFmon(char tipoINFmon){
+    Ataque ataqueForte;
     strcpy(ataqueBasico.nome, "Morder");
     ataqueBasico.dano = 2;
     ataqueBasico.dano = TIPO_NORMAL;
@@ -252,7 +259,7 @@ void criaArquivoDeAtaques(){
 }
 
 
-void adicionaINFmon(char tipo, int indice){
+void adicionaINFmon(char tipo, int indice, int isPrimeiro){
     FILE *arq;
     Infmon infmon[MAX_INFMONS];
     Infmon leuBIN;
@@ -261,15 +268,27 @@ void adicionaINFmon(char tipo, int indice){
         case TIPO_AGUA:
             infmon[indice] = criaINFmon(TIPO_AGUA);
             jogador.infmons[indice] = criaINFmon(TIPO_AGUA);
+            if(isPrimeiro){
+                infmon[indice].nivel = 1;
+                jogador.infmons[indice].nivel = 1;
+            }
             break;
         case TIPO_FOGO:
             infmon[indice] = criaINFmon(TIPO_FOGO);
             jogador.infmons[indice] = criaINFmon(TIPO_FOGO);
+            if(isPrimeiro){
+                infmon[indice].nivel = 1;
+                jogador.infmons[indice].nivel = 1;
+            }
             break;
 
         case TIPO_TERRA:
             infmon[indice] = criaINFmon(TIPO_TERRA);
             jogador.infmons[indice] = criaINFmon(TIPO_TERRA);
+            if(isPrimeiro){
+                infmon[indice].nivel = 1;
+                jogador.infmons[indice].nivel = 1;
+            }
             break;
     }
 

@@ -20,6 +20,7 @@ typedef struct {
     int ataque;
     int defesa;
     int xp;
+    int xpMax;
     char tipo;
     Ataque ataques[N_ATAQUES];
 } Infmon;
@@ -41,7 +42,7 @@ typedef struct{
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
 Infmon criaPokemonInimigoTerra();
-void adicionaINFmon(char tipo, int indice);
+void adicionaINFmon(char tipo, int indice, int isPrimeiro);
 Infmon criaINFmonAleatorio(int fase);
 void criaArquivoDeAtaques();
 void leArquivosDeAtaques();
