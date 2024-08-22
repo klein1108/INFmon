@@ -41,11 +41,12 @@ typedef struct{
 
 Infmon criaPokemonAliadoAgua();
 Infmon criaPokemonInimigoFogo();
-Infmon criaPokemonInimigoTerra();
-void adicionaINFmon(char tipo, int indice, int isPrimeiro);
+//Infmon criaPokemonInimigoTerra();
+void adicionaInfmon(Personagem *jogador, Infmon novoInfmon);
+Infmon geraInicial(char tipo);
 Infmon criaINFmonAleatorio(int fase);
-void criaArquivoDeAtaques();
-void leArquivosDeAtaques();
+//void criaArquivoDeAtaques();
+//void leArquivosDeAtaques();
 int salvaJogo(Save jogoAtual);
 int carregaJogo(Save *jogoSalvo);
 

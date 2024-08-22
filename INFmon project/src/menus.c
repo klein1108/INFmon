@@ -193,12 +193,13 @@ int menuPause(int processoAtual){
 
 //------------------------------------------------------------------------------------
 
-int menuEscolheInfmon(int processoAtual){
+int menuEscolheInfmon(int processoAtual, Personagem *jogador){
 
     int NUM_INFMONS = 3;
 
     Color corInfmons[3] = {GREEN, BLUE, RED};
     Rectangle infmons[3];
+    Infmon inicial;
 
     static const char *nomeInfmons[] = {
         "Folhinha", //grama
@@ -264,7 +265,11 @@ int menuEscolheInfmon(int processoAtual){
                 }
 
                 if(escolhido != ' '){
-                    adicionaINFmon(escolhido, 0, TRUE);
+                    inicial = geraInicial(escolhido);
+                    printf("AQUI");
+                    adicionaInfmon(jogador, inicial);
+                    printf("AQUI");
+
 //                    criaArquivoDeAtaques();
 //                    leArquivosDeAtaques();
 
@@ -360,7 +365,7 @@ int menuFimDeJogo(int processoAtual, int situacao){
 
 //------------------------------------------------------------------------------------
 
-int menuBatalha(int *processoInternoAtual, int isBoss){
+int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jogador){
     int isFecharJanela = FALSE;
 
     int resultadoBatalha = BATALHA_DERROTA;
@@ -368,6 +373,10 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
     int infmonInimigoAtual = MAX_INFMONS;
     int infmonAliadoAtual = MAX_INFMONS;
 
+    printf("\nN_INFMONS: %d", jogador->nInfmons);
+//    for(int i = 0; i < 3; i++){
+//        printf("\nINFMON: %s", jogador->infmons[i].nome);
+//    }
 
     Infmon INFmonsInimigos[3] = {};
 
@@ -463,7 +472,7 @@ int menuBatalha(int *processoInternoAtual, int isBoss){
 
         switch(processoAtualBatalha){
             case PROCESSO_BATALHA_INICIAL:
-                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha, isBoss);
+                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha, isBoss, jogador, &INFmonsInimigos[0], *fase);
                 break;
             case PROCESSO_BATALHA_ATAQUES:
                     criaInterfaceMenuBatalhaAtaques(botoes, aliado.infmons[infmonAliadoAtual], &INFmonsInimigos[infmonInimigoAtual], posX, posY, &processoAtualBatalha, &infmonInimigoAtual);
@@ -720,7 +729,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
 
 }
 
-void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss){
+void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss, Personagem *jogador, Infmon *inimigo, int fase){
     static const char *labelBotoesBatalha[] = {
         "Atacar",
         "Captura",
@@ -748,7 +757,19 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
                         if(isBoss){
                             printf("\nACAO INVALIDA\n");
                         } else {
-                            printf("%s\n", labelBotoesBatalha[i]);
+                            int chance = calculaChanceCaptura(*inimigo, fase);
+                            if(jogador->nInfmons<=5){
+                                if(!sorteiaProbabilidade(chance)){
+                                    adicionaInfmon(jogador, *inimigo);
+                                    *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
+                                }
+                                else{
+                                    //TEXTO NAO CAPTUROU
+                                }
+                            }
+                            else{
+                                //TEXTO NUM MAX DE INFMONS
+                            }
                         }
 
                     } break;
@@ -756,6 +777,7 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         printf("%s\n", labelBotoesBatalha[i]);
+                        menuTrocaInfmon(processoAtualBatalha, jogador);
                     }
 
                     break;
@@ -781,4 +803,119 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
     }
 
 }
+
+int calculaChanceCaptura(Infmon infmon, int fase){
+    int chance;
+
+    chance = infmon.nivel -(2*fase) + (int) infmon.vida/25;
+
+    if(chance<=0){
+        chance = 1;
+    }
+
+    return chance;
+}
+
+void menuTrocaInfmon(int *processoAtualBatalha, Personagem *jogador){
+
+    static const char titulo[] = {"Troca"};
+    Rectangle botoes[MAX_INFMONS + 1];
+    Color corInfmon = GRAY;
+    int mouseCimaDeBotaoN = -1;
+
+    *processoAtualBatalha = PROCESSO_BATALHA_TROCA;
+
+    while(!WindowShouldClose() && *processoAtualBatalha == PROCESSO_BATALHA_TROCA){
+        BeginDrawing();
+        ClearBackground(WHITE);
+
+        DrawText(titulo, 50, ALTURA/2 - 40, 80, BLACK);
+
+        for(int i=0; i<jogador->nInfmons; i++){
+
+            if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
+                mouseCimaDeBotaoN = i;
+            }
+
+            if(IsKeyPressed(KEY_ONE)){
+
+            }
+            if(IsKeyPressed(KEY_TWO)){
+
+            }
+            if(IsKeyPressed(KEY_THREE)){
+
+            }
+            if(IsKeyPressed(KEY_FOUR)){
+
+            }
+            if(IsKeyPressed(KEY_FIVE)){
+
+            }
+            if(IsKeyPressed(KEY_Q)){
+                *processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+            }
+
+            switch(mouseCimaDeBotaoN){
+                case 0:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
+                    } break;
+
+                case 1:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
+                    } break;
+
+                case 2:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
+                    } break;
+
+                case 3:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
+                    } break;
+
+                case 4:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+
+                    } break;
+                case 5:
+                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        *processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
+                    } break;
+
+            }
+
+
+            switch (jogador->infmons[i].tipo) {
+                case 'A':
+                    corInfmon = BLUE;
+                    break;
+                case 'F':
+                    corInfmon = RED;
+                    break;
+                case 'T':
+                    corInfmon = GREEN;
+                    break;
+            }
+            //Desenha todos os elementos na tela
+            DrawRectangle(LARGURA/3 - 40, 50 + GAP_ENTRE_BOTOES*i, 80, 80, corInfmon);
+            criaBarraDeVidaINFmon(LARGURA/3 + 50, 110 + GAP_ENTRE_BOTOES*i, jogador->infmons[i]);
+            DrawText(jogador->infmons[i].nome, LARGURA/3 + 50,  70 + GAP_ENTRE_BOTOES*i, 30, BLACK);
+            botoes[i] = criaBotao(LARGURA/2 +70, 50.0f, 120.0f, 80.0f, 0, (float)GAP_ENTRE_BOTOES, i, 2.0f, WHITE, GRAY, (i == mouseCimaDeBotaoN));
+            DrawText("Escolher", LARGURA/2 +75, (int) botoes[i].y + botoes[i].height/2 - 24/2 , 24, BLACK);
+//            botoes[5] = criaBotao(LARGURA*3/4, ALTURA/2 - 40, 120, 80, 0, 0, 5, 2, WHITE, RED, (5 == mouseCimaDeBotaoN));
+//            DrawText("SAIR", (int) botoes[5].x+20, (int) botoes[5].y+25, 30, BLACK);
+            //ENQUANTO BOTAO SAIR NAO FUNCIONA
+            DrawText("Pressione Q\n para voltar", LARGURA*3/4, ALTURA/2 - 40, 40, BLACK);
+        }
+
+        EndDrawing();
+    }
+
+}
+
+
 

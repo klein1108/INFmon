@@ -7,7 +7,7 @@
 #include "menus.h"
 #include "contants.h"
 
-int inicializaMapa(int processoAtual, int isPrimeiraVez);
-void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez);
-void moveJogador(char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual);
+int inicializaMapa(int processoAtual, int isPrimeiraVez, Personagem *jogador, int *fase);
+void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Personagem *jogador, int *fase);
+void moveJogador(char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual, Personagem *jogador);
 #endif // mapa_h

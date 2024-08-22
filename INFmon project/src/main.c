@@ -17,6 +17,8 @@ int main(){
     Save jogoAtual;
     Save jogoSalvo;
 
+    Personagem jogador;
+
     int fase = 1;
     int isPrimeiraVez = 1;
 
@@ -35,7 +37,8 @@ int main(){
                 processoAtual = menuInicial(processoAtual);
                 break;
             case PROCESSO_NOVO_JOGO:
-                processoAtual = menuEscolheInfmon(processoAtual);
+                jogador.nInfmons = 0;
+                processoAtual = menuEscolheInfmon(processoAtual, &jogador);
                 break;
             case PROCESSO_CARREGAR_JOGO:
                 isPrimeiraVez = 0;
@@ -54,7 +57,7 @@ int main(){
         }
 
         if(processoAtual == PROCESSO_INICIA_JOGO){
-            processoAtual = inicializaMapa(processoAtual, isPrimeiraVez);
+            processoAtual = inicializaMapa(processoAtual, isPrimeiraVez, &jogador, &fase);
         }
     }
     CloseWindow();                                          //Fecha a janela e o contexto OpenGL
