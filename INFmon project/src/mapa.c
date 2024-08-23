@@ -92,11 +92,11 @@ int inicializaMapa(int processoAtual, int *isPrimeiraVez, Personagem *jogador, i
     int i, j;
     //PARA FUNCIONAR NO XCODE
     static const char *mapas[] = {
-        "mapas/mapa1.txt",
-        "mapas/mapa2.txt",
-        "mapas/mapa3.txt",
-        "mapas/mapa4.txt",
-        "mapas/mapa5.txt"
+        "./mapas/mapa1.txt",
+        "./mapas/mapa2.txt",
+        "./mapas/mapa3.txt",
+        "./mapas/mapa4.txt",
+        "./mapas/mapa5.txt"
     };
     //PARA FUNCIONAR NO CODEBLOKCS
 //    static const char *mapas[] = {
