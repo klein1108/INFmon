@@ -1,6 +1,6 @@
 #include "../lib/mapa.h"
 
-void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Personagem *jogador, int *fase){
+void desenhaMapa(char mapa[MAX_LINHA][MAX_COLUNA-1], int *isPrimeiraVez, Personagem *jogador){
     Color corPosMapa = WHITE;
 
     for(int i = 0; i < MAX_LINHA; i++){
@@ -75,7 +75,7 @@ void moveJogador(char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual, 
         }
     }
 
-    DrawRectangle(jogador->posX*20, jogador->posY*20, 20, 20, BLUE);
+    DrawRectangle(jogador->posX*TAM_PIXEL, jogador->posY*TAM_PIXEL, TAM_PIXEL, TAM_PIXEL, BLUE);
 
     if(mapa[jogador->posY][jogador->posX] == 'E'){
         //BATALHA COM INIMIGO
@@ -84,15 +84,32 @@ void moveJogador(char mapa[MAX_LINHA][MAX_COLUNA-1], int *processoInternoAtual, 
 
 }
 
-int inicializaMapa(int processoAtual, int isPrimeiraVez, Personagem *jogador, int *fase){
+int inicializaMapa(int processoAtual, int *isPrimeiraVez, Personagem *jogador, int *fase){
     int processoInternoAtual = PROCESSO_INTERNO_MAPA;
 
     char mapa[MAX_LINHA][MAX_COLUNA];
     char dadoColetado;
     int i, j;
+    //PARA FUNCIONAR NO XCODE
+    static const char *mapas[] = {
+        "mapas/mapa1.txt",
+        "mapas/mapa2.txt",
+        "mapas/mapa3.txt",
+        "mapas/mapa4.txt",
+        "mapas/mapa5.txt"
+    };
+    //PARA FUNCIONAR NO CODEBLOKCS
+//    static const char *mapas[] = {
+//        "./mapas/mapa4.txt",
+//        "./mapas/mapa2.txt",
+//        "./mapas/mapa3.txt",
+//        "./mapas/mapa4.txt",
+//        "./mapas/mapa5.txt"
+//    };
+
 
     FILE *arqMapa = NULL;
-    arqMapa = fopen("./mapas/mapa4.txt", "r");
+    arqMapa = fopen(mapas[*fase-1], "r");
 
     if(arqMapa == NULL){
         printf("\n\tARQUIVO INEXISTENTE\n");
@@ -113,12 +130,6 @@ int inicializaMapa(int processoAtual, int isPrimeiraVez, Personagem *jogador, in
 
         fclose(arqMapa);
 
-//        for(int i = 0; i < MAX_LINHA; i++){
-//            for(int j = 0; j < MAX_COLUNA; j++){
-//                printf("%c", mapa[i][j]);
-//            }
-//        }
-
         int resultadoBatalha = NULL;
         int isBoss = FALSE;
 
@@ -137,16 +148,25 @@ int inicializaMapa(int processoAtual, int isPrimeiraVez, Personagem *jogador, in
                         jogador->posX = jogador->posX + 2;
                         resultadoBatalha = NULL;
                     }
-                    desenhaMapa(mapa, &isPrimeiraVez, jogador, fase);
+                    desenhaMapa(mapa, isPrimeiraVez, jogador);
                     moveJogador(mapa, &processoInternoAtual, jogador);
                     break;
 
                 case PROCESSO_INTERNO_BATALHA_BOSS:
                     resultadoBatalha = menuBatalha(&processoInternoAtual, TRUE, fase, jogador);
                     //Move char para lado para que nao volte em cima do inimigo e fique preso no menu de batalha
-                    jogador->posX = jogador->posX + 2;
-                    //depois que sai da batalha carrega o mapa
-                    processoInternoAtual = PROCESSO_INTERNO_MAPA;
+
+                    if(resultadoBatalha == BATALHA_DERROTA){
+                        processoAtual = menuFimDeJogo(processoAtual, FALSE);
+                    }
+                    else if(resultadoBatalha == BATALHA_VITORIA){
+                        if(*fase < NUM_FASES){
+                            processoAtual = PROCESSO_PASSOU_FASE;
+                        }
+                        else{
+                            processoAtual = menuFimDeJogo(processoAtual, TRUE);
+                        }
+                    }
                     break;
 
                 case PROCESSO_INTERNO_BATALHA_INFMON:

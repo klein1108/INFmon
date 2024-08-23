@@ -31,7 +31,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="lib/charactions.h" />
 		<Unit filename="lib/contants.h" />
 		<Unit filename="lib/infmons.h" />
 		<Unit filename="lib/mapa.h" />
@@ -41,9 +40,6 @@
 		<Unit filename="mapas/mapa2.txt" />
 		<Unit filename="mapas/mapa3.txt" />
 		<Unit filename="mapas/mapa4.txt" />
-		<Unit filename="src/charactions.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/infmons.c">
 			<Option compilerVar="CC" />
 		</Unit>

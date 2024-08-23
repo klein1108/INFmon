@@ -2,76 +2,6 @@
 static Ataque ataqueBasico;
 static Ataque ataqueMedio;
 
-//REMOVE
-Infmon criaPokemonAliadoAgua(){
-    Ataque ataqueForte;
-    Infmon aliado;
-
-    strcpy(aliado.nome, "Printf bonzinho");
-
-    strcpy(ataqueForte.nome, "Molhar");
-    ataqueForte.dano = 4;
-    ataqueForte .tipo = TIPO_AGUA;
-
-    aliado.tipo = TIPO_AGUA;
-    aliado.nivel = 3;
-    aliado.ataque = aliado.nivel * ATAQUE_DEFESA_DEFAULT;
-    aliado.defesa = aliado.nivel * ATAQUE_DEFESA_DEFAULT;
-    aliado.xp = 0;
-    aliado.VIDA_MAX = (aliado.nivel-1)*20 + 100; //nivel-1*20 + 100;
-    aliado.vida = aliado.VIDA_MAX;
-
-    aliado.ataques[0] = ataqueBasico;
-    aliado.ataques[1] = ataqueMedio;
-    aliado.ataques[2] = ataqueForte;
-
-    aliado.xp = 0;
-    aliado.vida = (aliado.nivel-1)*20 + 100; //nivel-1*20 + 100;
-
-    return aliado;
-}
-
-
-//REMOVE
-Infmon criaPokemonInimigoFogo(){
-    Ataque ataqueForte;
-    strcpy(ataqueBasico.nome, "Morder");
-    ataqueBasico.dano = 2;
-    ataqueBasico.tipo = TIPO_NORMAL;
-
-    strcpy(ataqueMedio.nome, "Chutar");
-    ataqueMedio.dano = 3;
-    ataqueBasico.tipo = TIPO_NORMAL;
-
-//    strcpy(ataqueForte.nome, "Xingar");
-//    ataqueForte.dano = 5;
-//    ataqueBasico.tipo = TIPO_FOGO;
-
-    strcpy(ataqueForte.nome, "Foguetar");
-    ataqueForte.dano = 4;
-    ataqueForte .tipo = TIPO_FOGO;
-//    strcpy(ataqueAguaTres.nome, "Gotejar");
-
-
-
-    Infmon inimigo;
-    strcpy(inimigo.nome, "Scanf bandido");
-
-    inimigo.tipo = TIPO_FOGO;
-    inimigo.nivel = 1;
-    inimigo.ataque = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
-    inimigo.defesa = inimigo.nivel * ATAQUE_DEFESA_DEFAULT;
-    inimigo.xp = 0;
-    inimigo.VIDA_MAX = (inimigo.nivel-1)*20 + 100; //nivel-1*20 + 100;
-    inimigo.vida = inimigo.VIDA_MAX;
-
-    inimigo.ataques[0] = ataqueBasico;
-    inimigo.ataques[1] = ataqueMedio;
-    inimigo.ataques[2] = ataqueForte;
-
-    return inimigo;
-}
-
 Infmon criaINFmonAleatorio(int fase){
     Ataque ataqueForte;
     Infmon infmon;
@@ -117,6 +47,8 @@ Infmon criaINFmonAleatorio(int fase){
     infmon.ataques[0] = ataqueBasico;
     infmon.ataques[1] = ataqueMedio;
     infmon.ataques[2] = ataqueForte;
+    infmon.totalDanoDado = 0;
+    infmon.xpMax = infmon.nivel*MIN_XP;
 
     return infmon;
 }
@@ -171,6 +103,7 @@ Infmon geraInicial(char tipo){
     inicial.ataques[0] = ataqueBasico;
     inicial.ataques[1] = ataqueMedio;
     inicial.ataques[2] = ataqueForte;
+    inicial.xpMax = inicial.nivel*MIN_XP;
 
     return inicial;
 }

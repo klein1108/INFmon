@@ -264,23 +264,18 @@ int menuEscolheInfmon(int processoAtual, Personagem *jogador){
 
                 }
 
-                if(escolhido != ' '){
-                    inicial = geraInicial(escolhido);
-                    printf("AQUI");
-                    adicionaInfmon(jogador, inicial);
-                    printf("AQUI");
-
-//                    criaArquivoDeAtaques();
-//                    leArquivosDeAtaques();
-
-                    processoAtual = PROCESSO_INICIA_JOGO;
-                }
-
 
                 infmons[i] = criaBotao(LARGURA/2 -150, 150.0f, 100.0f, 100.0f, 0, (float)GAP_ENTRE_BOTOES, i, 5.0f, WHITE, corInfmons[mouseCimaDeBotaoN], (i == mouseCimaDeBotaoN));
                 DrawText(nomeInfmons[i], LARGURA/2+50, (int) infmons[i].y + infmons[i].height/2 - 30/2  , 30, BLACK);
 
             }
+
+            if(escolhido != ' '){
+                inicial = geraInicial(escolhido);
+                adicionaInfmon(jogador, inicial);
+                processoAtual = PROCESSO_INICIA_JOGO;
+            }
+
 
         EndDrawing();
 
@@ -373,20 +368,15 @@ int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jo
     int infmonInimigoAtual = MAX_INFMONS;
     int infmonAliadoAtual = MAX_INFMONS;
 
-    printf("\nN_INFMONS: %d", jogador->nInfmons);
-//    for(int i = 0; i < 3; i++){
-//        printf("\nINFMON: %s", jogador->infmons[i].nome);
-//    }
-
     Infmon INFmonsInimigos[3] = {};
 
     if(isBoss == PROCESSO_INTERNO_BATALHA_BOSS){
         Personagem boss;
         boss.nInfmons = 3;
         infmonInimigoAtual = boss.nInfmons - 1;
-        Infmon bossInfmonUm = criaPokemonAliadoAgua();
-        Infmon bossInfmonDois = criaPokemonInimigoFogo();
-        Infmon bossInfmonTres = criaPokemonInimigoFogo();
+        Infmon bossInfmonUm = criaINFmonAleatorio(*fase);
+        Infmon bossInfmonDois = criaINFmonAleatorio(*fase);
+        Infmon bossInfmonTres = criaINFmonAleatorio(*fase);
 
 //        INFmonsInimigos[0] = bossInfmonUm;
 //        INFmonsInimigos[1] = bossInfmonDois;
@@ -412,14 +402,9 @@ int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jo
 
 
     //CARREGA DADOS DO PERSONAGEM ATUAL
-    Personagem aliado;
-    aliado.nInfmons = 2;
-    infmonAliadoAtual = aliado.nInfmons - 1;
-    //pega infmons do arquivo
-    Infmon aliadoInfmonUm = criaPokemonAliadoAgua();
-    Infmon aliadoInfmonDois = criaPokemonInimigoFogo();
-    aliado.infmons[0] = aliadoInfmonUm;
-    aliado.infmons[1] = aliadoInfmonDois;
+    Personagem aliado = *jogador;
+    aliado.nInfmons = jogador->nInfmons;
+    infmonAliadoAtual = 0;
 
 
     float bordaInferiorAltura = 250.0f;
@@ -472,19 +457,22 @@ int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jo
 
         switch(processoAtualBatalha){
             case PROCESSO_BATALHA_INICIAL:
-                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha, isBoss, jogador, &INFmonsInimigos[0], *fase);
+                    criaInterfaceMenuBatalhaInicial(botoes, &processoAtualBatalha, isBoss, &aliado, &INFmonsInimigos[0], *fase, &infmonAliadoAtual);
                 break;
             case PROCESSO_BATALHA_ATAQUES:
-                    criaInterfaceMenuBatalhaAtaques(botoes, aliado.infmons[infmonAliadoAtual], &INFmonsInimigos[infmonInimigoAtual], posX, posY, &processoAtualBatalha, &infmonInimigoAtual);
+                    criaInterfaceMenuBatalhaAtaques(botoes, &aliado.infmons[infmonAliadoAtual], &INFmonsInimigos[infmonInimigoAtual],
+                                                    posX, posY, &processoAtualBatalha, &infmonInimigoAtual);
                 break;
 
             case PROCESSO_BATALHA_TENTAR_FUGA:
                     resultadoBatalha = BATALHA_FUGA;
+                    *jogador = aliado;
+                    resetaValoresInfmons(jogador, aliado.nInfmons);
                     *processoInternoAtual = PROCESSO_INTERNO_MAPA;
                 break;
 
             case PROCESSO_BATALHA_TURNO_INIMIGO:
-                    if(ataqueInimigo(&aliado.infmons[infmonAliadoAtual], INFmonsInimigos[infmonInimigoAtual], &infmonAliadoAtual)){
+                    if(ataqueInimigo(aliado.infmons, &INFmonsInimigos[infmonInimigoAtual], &infmonAliadoAtual, aliado.nInfmons)){
                         processoAtualBatalha = PROCESSO_BATALHA_PERDEU;
                     } else {
                         processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
@@ -494,11 +482,18 @@ int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jo
 
             case PROCESSO_BATALHA_VENCEU:
                 resultadoBatalha = BATALHA_VITORIA;
+                *jogador = aliado;
+                resetaValoresInfmons(jogador, aliado.nInfmons);
+                sobeNivelInfmon(jogador);
                 *processoInternoAtual = PROCESSO_INTERNO_MAPA;
+
+
                 break;
 
             case PROCESSO_BATALHA_PERDEU:
                 resultadoBatalha = BATALHA_DERROTA;
+                *jogador = aliado;
+                resetaValoresInfmons(jogador, aliado.nInfmons);
                 *processoInternoAtual = PROCESSO_INTERNO_MAPA;
                 break;
         }
@@ -509,11 +504,30 @@ int menuBatalha(int *processoInternoAtual, int isBoss, int *fase, Personagem *jo
     return resultadoBatalha;
 }
 
-int ataqueInimigo(Infmon *aliado, Infmon inimigo, int *indexAliado){
+void sobeNivelInfmon(Personagem *jogador){
+    for(int i = 0; i < jogador->nInfmons; i++){
+        jogador->infmons[i].xp = jogador->infmons[i].totalDanoDado;
+        if(jogador->infmons[i].xp >= jogador->infmons[i].xpMax){
+            jogador->infmons[i].nivel += 1;
+            jogador->infmons[i].xp = 0;
+            jogador->infmons[i].totalDanoDado = 0;
+            jogador->infmons[i].xpMax = jogador->infmons[i].nivel*MIN_XP;
+        }
+    }
+}
+
+void resetaValoresInfmons(Personagem *jogador, int nInfmons){
+    for(int i = 0; i < nInfmons; i++){
+        jogador->infmons[i].vida = jogador->infmons[i].VIDA_MAX;
+    }
+}
+
+int ataqueInimigo(Infmon infmonsAliado[], Infmon *inimigo, int *indexAliado, int nInfmonsAliado){
     int ataque = sorteiaProbabilidade(3);
     int isVenceuBatalha = FALSE;
-//    printf("INFMON INIMIGO ATACOU COM %s", inimigo.ataques[ataque].nome);
-    isVenceuBatalha = calculaDano(inimigo.ataques[ataque], inimigo.ataque,aliado, indexAliado);
+    if(calculaDano(inimigo->ataques[ataque], inimigo, &infmonsAliado[*indexAliado], indexAliado, TRUE) == -1){
+        isVenceuBatalha = verificaProxInfmonAtivo(infmonsAliado, indexAliado, nInfmonsAliado);
+    }
     return isVenceuBatalha;
 }
 
@@ -581,24 +595,39 @@ void criaBarraDeVidaINFmon(float posX, float posY, Infmon infmon){
     DrawRectangleLinesEx(vidaContainer, vidaLarguraLinha, BLACK);
 }
 
+int verificaProxInfmonAtivo(Infmon infmonsAliado[], int *indexInfmonAtivo, int nInfmonsAliado){
+    int isPerdeuBatalha = TRUE;
+    for(int i = 0; i < nInfmonsAliado; i++){
+        if(infmonsAliado[i].vida > 0.0f){
+            *indexInfmonAtivo = i;
+            isPerdeuBatalha = FALSE;
+        }
+    }
+    return isPerdeuBatalha;
+}
+
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
-int calculaDano(Ataque ataque, int nivelAtaque, Infmon *infmonAlvo, int *indexAlvo){
+int calculaDano(Ataque ataque, Infmon *infmonAtacante, Infmon *infmonAlvo, int *indexAlvo, int isTurnoInimigo){
+    int trocaInfmonAliado = -1;
+
     int isVenceuBatalha = FALSE;
-    float danoVantagem = ATAQUE_NORMAL;
-    if(infmonAlvo->vida - ataque.dano <= 0.0f){
+    float danoVantagem = verificaSePossuiVantagem(ataque.tipo, infmonAlvo->tipo);
+    float danoTotal = ((float)(ataque.dano + infmonAtacante->ataque))*danoVantagem;
+    if(infmonAlvo->vida - danoTotal <= 0.0f){
         infmonAlvo->vida = 0.0f;
+
+        if(isTurnoInimigo){
+            return trocaInfmonAliado;
+        }
         if(*indexAlvo -1 >=0){
-            printf("Infmon %s foi substituido\n", infmonAlvo->nome);
-            printf("\n\nINDEX: %d", *indexAlvo);
             *indexAlvo -= 1;
         } else {
             isVenceuBatalha = TRUE;
-            printf("ALVO PERDEU\n");
         }
     } else {
-        danoVantagem = verificaSePossuiVantagem(ataque.tipo, infmonAlvo->tipo);
-        float danoTotal = ((float)(ataque.dano + nivelAtaque))*danoVantagem;
+        infmonAtacante->totalDanoDado += danoTotal;
         infmonAlvo->vida -= danoTotal;
+
     }
     return isVenceuBatalha;
 }
@@ -655,12 +684,14 @@ float verificaSePossuiVantagem(char tipoAtacante, char tipoAlvo){
 
 
 //TROCAR LOCAL DE CRIACAO DA FUNCAO
-void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *inimigo, float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha, int *indexInimigo){
+void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon *aliado, Infmon *inimigo,
+                                     float posXInicioTexto, float posYInicioTexto, int *processoAtualBatalha, int *indexInimigo){
     int NUM_BOTOES = 4;
 
     int isAcao = FALSE;
     double testeTime = 0;
     int mouseCimaDeBotaoN = 0;
+
 
     for (int i = 0; i < NUM_BOTOES; i++){
         if(CheckCollisionPointRec(GetMousePosition(), botoes[i])){
@@ -669,8 +700,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
             switch(mouseCimaDeBotaoN){
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                        if(calculaDano(aliado->ataques[i], aliado, inimigo, indexInimigo, FALSE)){
                             *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
                         } else {
                             testeTime = GetTime() + (double)3;
@@ -681,8 +711,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                        if(calculaDano(aliado->ataques[i], aliado, inimigo, indexInimigo, FALSE)){
                             *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
                         } else {
                             *processoAtualBatalha = PROCESSO_BATALHA_TURNO_INIMIGO;
@@ -692,8 +721,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("ATAQUE %s\n", aliado.ataques[i].nome);
-                        if(calculaDano(aliado.ataques[i], aliado.ataque, inimigo, indexInimigo)){
+                        if(calculaDano(aliado->ataques[i], aliado, inimigo, indexInimigo, FALSE)){
                             *processoAtualBatalha = PROCESSO_BATALHA_VENCEU;
                         } else {
                             *processoAtualBatalha = PROCESSO_BATALHA_TURNO_INIMIGO;
@@ -713,15 +741,13 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
         //TODO: MENSAGEM SEGUE ESSA ESTRUTURA, DEVE SER IMPLEMENTADO
         if(isAcao && GetTime() < testeTime){
             DrawText("Ocorreu uma acao realizada pelo jogador muito texto para testar e afins e tals", posXInicioTexto, posYInicioTexto, 24, BLACK);
-            printf("TEMPO = %lf\n", testeTime);
-
 
         } else {
             isAcao = FALSE;
             if(i == NUM_BOTOES - 1){
                 criaInterface(&botoes[i], NULL, i);
             } else {
-                criaInterface(&botoes[i], aliado.ataques[i].nome , i);
+                criaInterface(&botoes[i], aliado->ataques[i].nome , i);
             }
 
         }
@@ -729,7 +755,7 @@ void criaInterfaceMenuBatalhaAtaques(Rectangle botoes[], Infmon aliado, Infmon *
 
 }
 
-void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss, Personagem *jogador, Infmon *inimigo, int fase){
+void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatalha, int isBoss, Personagem *aliado, Infmon *inimigo, int fase, int *indexInfmon){
     static const char *labelBotoesBatalha[] = {
         "Atacar",
         "Captura",
@@ -747,7 +773,6 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
            switch(mouseCimaDeBotaoN){
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("%s\n", labelBotoesBatalha[i]);
                         *processoAtualBatalha = PROCESSO_BATALHA_ATAQUES;
                     }
                     break;
@@ -758,9 +783,9 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
                             printf("\nACAO INVALIDA\n");
                         } else {
                             int chance = calculaChanceCaptura(*inimigo, fase);
-                            if(jogador->nInfmons<=5){
+                            if(aliado->nInfmons<MAX_INFMONS){
                                 if(!sorteiaProbabilidade(chance)){
-                                    adicionaInfmon(jogador, *inimigo);
+                                    adicionaInfmon(aliado, *inimigo);
                                     *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
                                 }
                                 else{
@@ -776,8 +801,7 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                        printf("%s\n", labelBotoesBatalha[i]);
-                        menuTrocaInfmon(processoAtualBatalha, jogador);
+                        menuTrocaInfmon(processoAtualBatalha, aliado, indexInfmon);
                     }
 
                     break;
@@ -787,8 +811,6 @@ void criaInterfaceMenuBatalhaInicial(Rectangle botoes[], int *processoAtualBatal
                         if(isBoss){
                             printf("ACAO INVALIDA\n");
                         } else {
-                            printf("%s\n", labelBotoesBatalha[i]);
-                            //TODO: ADICIONAR CHANCE DE FUGA
                             //TODO: ADICIONAR MENSAGENS CASO TENTATIVA DE CERTO/ERRADO
                             *processoAtualBatalha = PROCESSO_BATALHA_TENTAR_FUGA;
                         }
@@ -816,7 +838,7 @@ int calculaChanceCaptura(Infmon infmon, int fase){
     return chance;
 }
 
-void menuTrocaInfmon(int *processoAtualBatalha, Personagem *jogador){
+void menuTrocaInfmon(int *processoAtualBatalha, Personagem *jogador, int *indexInfmon){
 
     static const char titulo[] = {"Troca"};
     Rectangle botoes[MAX_INFMONS + 1];
@@ -838,19 +860,20 @@ void menuTrocaInfmon(int *processoAtualBatalha, Personagem *jogador){
             }
 
             if(IsKeyPressed(KEY_ONE)){
+                if(jogador->infmons[0].vida > 0.0f){
+                    *indexInfmon = 0;
+                }
 
             }
             if(IsKeyPressed(KEY_TWO)){
-
+                if(jogador->nInfmons >= 2 && jogador->infmons[1].vida > 0.0f){
+                    *indexInfmon = 1;
+                }
             }
             if(IsKeyPressed(KEY_THREE)){
-
-            }
-            if(IsKeyPressed(KEY_FOUR)){
-
-            }
-            if(IsKeyPressed(KEY_FIVE)){
-
+                if(jogador->nInfmons >= 3 && jogador->infmons[2].vida > 0.0f){
+                    *indexInfmon = 2;
+                }
             }
             if(IsKeyPressed(KEY_Q)){
                 *processoAtualBatalha = PROCESSO_BATALHA_INICIAL;
@@ -859,28 +882,26 @@ void menuTrocaInfmon(int *processoAtualBatalha, Personagem *jogador){
             switch(mouseCimaDeBotaoN){
                 case 0:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        if(jogador->infmons[0].vida > 0.1f){
 
+                            *indexInfmon = 0;
+                        }
                     } break;
 
                 case 1:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-
+                        if(jogador->infmons[1].vida > 0.0f){
+                            *indexInfmon = 1;
+                        }
                     } break;
 
                 case 2:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-
+                        if(jogador->infmons[2].vida > 0.0f){
+                            *indexInfmon = 2;
+                        }
                     } break;
 
-                case 3:
-                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-
-                    } break;
-
-                case 4:
-                    if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-
-                    } break;
                 case 5:
                     if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
                         *processoAtualBatalha = PROCESSO_BATALHA_INICIAL;

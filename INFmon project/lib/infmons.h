@@ -2,7 +2,7 @@
 #define infmons_h
 
 
-#include "contants.h"
+#include "constantes.h"
 #include<stdio.h>
 #include<string.h>
 
@@ -22,6 +22,7 @@ typedef struct {
     int xp;
     int xpMax;
     char tipo;
+    float totalDanoDado;
     Ataque ataques[N_ATAQUES];
 } Infmon;
 

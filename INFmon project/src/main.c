@@ -54,10 +54,15 @@ int main(){
                 salvaJogo(jogoAtual);
                 processoAtual = PROCESSO_INICIA_JOGO;
                 break;
+            case PROCESSO_PASSOU_FASE:
+                fase++;
+                isPrimeiraVez = 1;
+                processoAtual = PROCESSO_INICIA_JOGO;
+                break;
         }
 
         if(processoAtual == PROCESSO_INICIA_JOGO){
-            processoAtual = inicializaMapa(processoAtual, isPrimeiraVez, &jogador, &fase);
+            processoAtual = inicializaMapa(processoAtual, &isPrimeiraVez, &jogador, &fase);
         }
     }
     CloseWindow();                                          //Fecha a janela e o contexto OpenGL

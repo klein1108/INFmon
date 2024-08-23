@@ -172,9 +172,11 @@ void criaInterface(Rectangle *botao, char texto[], int index){
 int sorteiaProbabilidade(int numPossibilidades){
     int sorteado;
 
-    srand(time(NULL));
-
-    sorteado = rand() % (numPossibilidades);
+    sorteado = GetRandomValue(0, numPossibilidades-1);
+//
+//    srand(time(NULL));
+//
+//    sorteado = rand() % (numPossibilidades);
 
     return sorteado;
 }

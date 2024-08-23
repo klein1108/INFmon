@@ -15,14 +15,16 @@
 #define PROCESSO_FECHA_JANELA 6
 #define PROCESSO_SALVAR_JOGO 7
 #define PROCESSO_MENU_FINAL 8
+#define PROCESSO_PASSOU_FASE 9
 
 #define PROCESSO_INTERNO_MAPA 0
 #define PROCESSO_INTERNO_BATALHA 1
 
 //-----INFMON-----------------------
 #define N_ATAQUES 3
-#define MAX_INFMONS 5
+#define MAX_INFMONS 3
 #define TAM_NOME 30
+#define MIN_XP 50
 
 #define TIPO_NORMAL 'N'
 #define TIPO_AGUA 'A'
@@ -38,6 +40,8 @@
 //-----MAPA-------------------------
 #define MAX_LINHA 30
 #define MAX_COLUNA 61
+#define TAM_PIXEL 20
+#define NUM_FASES 5
 
 //-----BATALHA----------------------
 #define BATALHA_FUGA -1
